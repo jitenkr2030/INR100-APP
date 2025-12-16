@@ -64,6 +64,15 @@ import {
   Link
 } from "lucide-react";
 
+interface Lesson {
+  id: string;
+  title: string;
+  content: string;
+  duration: number;
+  xpReward: number;
+  order: number;
+}
+
 interface Course {
   id: string;
   title: string;
@@ -82,6 +91,8 @@ interface Course {
   icon: any;
   color: string;
   filePath: string;
+  lessonsList?: Lesson[];
+  completedLessons?: string[];
 }
 
 interface Module {
@@ -112,11 +123,83 @@ export default function LearnPage() {
   const [loading, setLoading] = useState(true);
   const [showCourseModal, setShowCourseModal] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [userData, setUserData] = useState<any>(null);
 
-  // Mock course data based on the actual course structure
+  // Fetch real course data from API
   useEffect(() => {
-    const generateCourses = () => {
-      const courseData: Course[] = [
+    const fetchCourseData = async () => {
+      try {
+        // Demo user ID - in real app, get from authentication
+        const userId = "demo-user-id";
+        
+        const response = await fetch(`/api/learn/courses?userId=${userId}&category=${selectedCategory}&level=${selectedLevel}`);
+        const data = await response.json();
+        
+        if (response.ok) {
+          setCourses(data.courses || []);
+          setUserData(data.user);
+        } else {
+          console.error("Failed to fetch courses:", data.error);
+        }
+      } catch (error) {
+        console.error("Error fetching course data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourseData();
+  }, [selectedCategory, selectedLevel]);
+
+  // Generate categories from courses
+  useEffect(() => {
+    if (courses.length > 0) {
+      const generateCategories = () => {
+        const categoryMap = new Map<string, Course[]>();
+        courses.forEach(course => {
+          if (!categoryMap.has(course.category)) {
+            categoryMap.set(course.category, []);
+          }
+          categoryMap.get(course.category)?.push(course);
+        });
+
+        const categoryData: Category[] = Array.from(categoryMap.entries()).map(([categoryId, categoryCourses]) => {
+          const categoryTitles: { [key: string]: string } = {
+            "stock-market": "Stock Market",
+            "mutual-funds": "Mutual Funds", 
+            "wealth-building": "Wealth Building",
+            "psychology": "Behavioral Finance",
+            "risk-management": "Risk Management",
+            "safety": "Safety & Security"
+          };
+
+          return {
+            id: categoryId,
+            title: categoryTitles[categoryId] || categoryId,
+            description: `${categoryCourses.length} course${categoryCourses.length > 1 ? 's' : ''} available`,
+            modules: [{
+              id: categoryId,
+              title: categoryTitles[categoryId] || categoryId,
+              description: `${categoryCourses.length} course${categoryCourses.length > 1 ? 's' : ''} available`,
+              courses: categoryCourses,
+              icon: TrendingUp,
+              color: "bg-blue-100 text-blue-600"
+            }],
+            icon: TrendingUp,
+            color: "bg-blue-100 text-blue-600"
+          };
+        });
+
+        setCategories(categoryData);
+      };
+
+      generateCategories();
+    }
+  }, [courses]);
+
+  // Generate mock data as fallback if no real data available
+  const generateFallbackCourses = () => {
+    const courseData: Course[] = [
         // Stock Market Foundations
         {
           id: "stock-foundations-001",
@@ -826,23 +909,58 @@ export default function LearnPage() {
     learningHours: 18
   };
 
-  const handleEnrollCourse = (courseId: string) => {
-    setCourses(prevCourses => 
-      prevCourses.map(course => 
-        course.id === courseId 
-          ? { ...course, isEnrolled: true, progress: 0 }
-          : course
-      )
-    );
-    // Show success notification (you could add a toast notification here)
-    console.log(`Enrolled in course: ${courseId}`);
+  const handleEnrollCourse = async (courseId: string) => {
+    try {
+      const userId = "demo-user-id";
+      
+      const response = await fetch('/api/learn/progress', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId,
+          courseId,
+          action: 'enroll'
+        })
+      });
+
+      const data = await response.json();
+      
+      if (response.ok) {
+        // Update local course state
+        setCourses(prevCourses => 
+          prevCourses.map(course => 
+            course.id === courseId 
+              ? { ...course, isEnrolled: true, progress: 0 }
+              : course
+          )
+        );
+        
+        // Update user data if needed
+        if (userData) {
+          setUserData(prev => ({
+            ...prev,
+            totalXp: prev.totalXp + (data.xpEarned || 25)
+          }));
+        }
+        
+        alert(`Successfully enrolled in course! You earned ${data.xpEarned || 25} XP!`);
+      } else {
+        alert(data.error || "Failed to enroll in course");
+      }
+    } catch (error) {
+      console.error("Error enrolling in course:", error);
+      alert("Failed to enroll in course. Please try again.");
+    }
   };
 
   const handleStartLearning = (course: Course) => {
-    // Redirect to course content or learning interface
-    console.log(`Starting learning for: ${course.title}`);
-    // You could use router.push(`/learn/course/${course.id}`) here
-    alert(`Starting "${course.title}" course!`);
+    if (!course.isEnrolled) {
+      handleEnrollCourse(course.id);
+      return;
+    }
+    
+    // Navigate to lesson viewer
+    window.location.href = `/learn/lesson/${course.id}/${course.lessonsList?.[0]?.id || 'lesson-01'}`;
   };
 
   const handleViewCourse = (course: Course) => {
@@ -851,10 +969,16 @@ export default function LearnPage() {
   };
 
   const handleContinueLearning = (course: Course) => {
-    // Continue from where user left off
-    console.log(`Continuing learning for: ${course.title}`);
-    // You could use router.push(`/learn/course/${course.id}?continue=true`) here
-    alert(`Continuing "${course.title}" course from ${course.progress}% progress!`);
+    // Navigate to continue from last lesson
+    const nextLessonId = course.lessonsList?.find(lesson => 
+      !course.completedLessons?.includes(lesson.id)
+    )?.id;
+    
+    if (nextLessonId) {
+      window.location.href = `/learn/lesson/${course.id}/${nextLessonId}?continue=true`;
+    } else {
+      alert(`You've completed all lessons in "${course.title}"! 🎉`);
+    }
   };
 
   const getFilteredCourses = () => {
@@ -1449,17 +1573,40 @@ export default function LearnPage() {
                   </div>
                 </div>
 
-                {/* Topics */}
+                {/* Lessons List */}
                 <div className="mb-6">
-                  <h3 className="font-semibold text-lg mb-3">Course Topics</h3>
-                  <div className="grid md:grid-cols-2 gap-2">
-                    {selectedCourse.topics.map((topic, index) => (
-                      <div key={index} className="flex items-center space-x-2 text-sm">
-                        <CheckCircle className="h-4 w-4 text-green-500" />
-                        <span>{topic}</span>
-                      </div>
-                    ))}
-                  </div>
+                  <h3 className="font-semibold text-lg mb-3">Course Lessons</h3>
+                  {selectedCourse.lessonsList && selectedCourse.lessonsList.length > 0 ? (
+                    <div className="space-y-2 max-h-60 overflow-y-auto">
+                      {selectedCourse.lessonsList.map((lesson, index) => {
+                        const isCompleted = selectedCourse.completedLessons?.includes(lesson.id);
+                        return (
+                          <div key={lesson.id} className="flex items-center justify-between p-2 border rounded">
+                            <div className="flex items-center space-x-3">
+                              <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs ${
+                                isCompleted ? 'bg-green-500 text-white' : 'bg-gray-200 text-gray-600'
+                              }`}>
+                                {isCompleted ? <CheckCircle className="h-3 w-3" /> : index + 1}
+                              </div>
+                              <span className="text-sm font-medium">{lesson.title}</span>
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {lesson.duration}min • {lesson.xpReward} XP
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="grid md:grid-cols-2 gap-2">
+                      {selectedCourse.topics.map((topic, index) => (
+                        <div key={index} className="flex items-center space-x-2 text-sm">
+                          <CheckCircle className="h-4 w-4 text-green-500" />
+                          <span>{topic}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 {/* Action Buttons */}
