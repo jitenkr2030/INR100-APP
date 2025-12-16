@@ -140,9 +140,11 @@ export default function LearnPage() {
           setUserData(data.user);
         } else {
           console.error("Failed to fetch courses:", data.error);
+          generateFallbackCourses();
         }
       } catch (error) {
         console.error("Error fetching course data:", error);
+        generateFallbackCourses();
       } finally {
         setLoading(false);
       }
@@ -150,6 +152,164 @@ export default function LearnPage() {
 
     fetchCourseData();
   }, [selectedCategory, selectedLevel]);
+
+  // Generate mock data as fallback if no real data available
+  const generateFallbackCourses = () => {
+    const courseData: Course[] = [
+      {
+        id: "stock-foundations-001",
+        title: "Stock Market Foundations",
+        description: "Beginner friendly introduction to stock market basics",
+        category: "stock-market",
+        module: "stock-foundations",
+        level: "beginner",
+        duration: "2-3 hours",
+        lessons: 10,
+        topics: ["How the stock market works", "Primary vs secondary market", "IPO basics", "Market indices", "Trading hours"],
+        isEnrolled: true,
+        progress: 60,
+        xpReward: 150,
+        importance: "high",
+        icon: TrendingUp,
+        color: "bg-blue-100 text-blue-600",
+        filePath: "/courses/stock-market-foundations/"
+      },
+      {
+        id: "mutual-funds-001",
+        title: "Mutual Funds Deep Dive",
+        description: "Comprehensive guide to mutual fund investing",
+        category: "mutual-funds",
+        module: "mutual-funds-deep-dive",
+        level: "intermediate",
+        duration: "3-4 hours",
+        lessons: 11,
+        topics: ["Types of mutual funds", "Index vs active funds", "How NAV works", "Expense ratio", "Fund management"],
+        isEnrolled: false,
+        progress: 0,
+        xpReward: 200,
+        importance: "high",
+        icon: PieChart,
+        color: "bg-green-100 text-green-600",
+        filePath: "/courses/mutual-funds-deep-dive/"
+      },
+      {
+        id: "sip-wealth-001",
+        title: "SIP & Wealth Building",
+        description: "Master systematic investment and wealth creation",
+        category: "wealth-building",
+        module: "sip-wealth-building",
+        level: "beginner",
+        duration: "2-3 hours",
+        lessons: 9,
+        topics: ["SIP vs lump-sum", "Power of compounding", "SIP calculations", "Financial goals", "Asset allocation"],
+        isEnrolled: true,
+        progress: 30,
+        xpReward: 175,
+        importance: "high",
+        icon: PiggyBank,
+        color: "bg-purple-100 text-purple-600",
+        filePath: "/courses/sip-wealth-building/"
+      },
+      {
+        id: "behavioral-finance-001",
+        title: "Behavioral Finance Psychology",
+        description: "Understanding the psychology of investing",
+        category: "psychology",
+        module: "behavioral-finance-psychology",
+        level: "intermediate",
+        duration: "1-2 hours",
+        lessons: 5,
+        topics: ["Cognitive biases", "Emotional investing", "Decision making", "Market psychology", "Discipline building"],
+        isEnrolled: false,
+        progress: 0,
+        xpReward: 125,
+        importance: "medium",
+        icon: Brain,
+        color: "bg-orange-100 text-orange-600",
+        filePath: "/courses/behavioral-finance-psychology/"
+      },
+      {
+        id: "risk-management-001",
+        title: "Risk Management & Safety",
+        description: "Learn to protect your investments",
+        category: "risk-management",
+        module: "risk-management-safety",
+        level: "beginner",
+        duration: "2-3 hours",
+        lessons: 7,
+        topics: ["Understanding volatility", "Risk measurement", "Drawdowns", "Diversification", "Emergency funds"],
+        isEnrolled: true,
+        progress: 45,
+        xpReward: 150,
+        importance: "high",
+        icon: Shield,
+        color: "bg-red-100 text-red-600",
+        filePath: "/courses/risk-management-safety/"
+      },
+      {
+        id: "scam-awareness-001",
+        title: "Scam Awareness",
+        description: "VERY IMPORTANT - Protect yourself from fraud",
+        category: "safety",
+        module: "scam-awareness",
+        level: "beginner",
+        duration: "1-2 hours",
+        lessons: 7,
+        topics: ["Stock market fraud", "Pump and dump schemes", "WhatsApp scams", "Broker verification", "Ponzi schemes"],
+        isEnrolled: true,
+        progress: 80,
+        xpReward: 100,
+        importance: "critical",
+        warning: "Critical security course - Must complete before investing",
+        icon: AlertTriangle,
+        color: "bg-yellow-100 text-yellow-800",
+        filePath: "/courses/scam-awareness/"
+      }
+    ];
+
+    // Generate categories from courses
+    const categoryMap = new Map<string, Course[]>();
+    courseData.forEach(course => {
+      if (!categoryMap.has(course.category)) {
+        categoryMap.set(course.category, []);
+      }
+      categoryMap.get(course.category)?.push(course);
+    });
+
+    const categoryTitles: { [key: string]: string } = {
+      "stock-market": "Stock Market",
+      "mutual-funds": "Mutual Funds", 
+      "wealth-building": "Wealth Building",
+      "psychology": "Behavioral Finance",
+      "risk-management": "Risk Management",
+      "safety": "Safety & Security"
+    };
+
+    const categoryData: Category[] = Array.from(categoryMap.entries()).map(([categoryId, categoryCourses]) => ({
+      id: categoryId,
+      title: categoryTitles[categoryId] || categoryId,
+      description: `${categoryCourses.length} course${categoryCourses.length > 1 ? 's' : ''} available`,
+      modules: [{
+        id: categoryId,
+        title: categoryTitles[categoryId] || categoryId,
+        description: `${categoryCourses.length} course${categoryCourses.length > 1 ? 's' : ''} available`,
+        courses: categoryCourses,
+        icon: TrendingUp,
+        color: "bg-blue-100 text-blue-600"
+      }],
+      icon: TrendingUp,
+      color: "bg-blue-100 text-blue-600"
+    }));
+
+    setCourses(courseData);
+    setCategories(categoryData);
+    setUserData({
+      subscriptionTier: "BASIC",
+      totalXp: 2500,
+      level: 5,
+      completedLessons: 3
+    });
+  };
 
   // Generate categories from courses
   useEffect(() => {
@@ -163,32 +323,30 @@ export default function LearnPage() {
           categoryMap.get(course.category)?.push(course);
         });
 
-        const categoryData: Category[] = Array.from(categoryMap.entries()).map(([categoryId, categoryCourses]) => {
-          const categoryTitles: { [key: string]: string } = {
-            "stock-market": "Stock Market",
-            "mutual-funds": "Mutual Funds", 
-            "wealth-building": "Wealth Building",
-            "psychology": "Behavioral Finance",
-            "risk-management": "Risk Management",
-            "safety": "Safety & Security"
-          };
+        const categoryTitles: { [key: string]: string } = {
+          "stock-market": "Stock Market",
+          "mutual-funds": "Mutual Funds", 
+          "wealth-building": "Wealth Building",
+          "psychology": "Behavioral Finance",
+          "risk-management": "Risk Management",
+          "safety": "Safety & Security"
+        };
 
-          return {
+        const categoryData: Category[] = Array.from(categoryMap.entries()).map(([categoryId, categoryCourses]) => ({
+          id: categoryId,
+          title: categoryTitles[categoryId] || categoryId,
+          description: `${categoryCourses.length} course${categoryCourses.length > 1 ? 's' : ''} available`,
+          modules: [{
             id: categoryId,
             title: categoryTitles[categoryId] || categoryId,
             description: `${categoryCourses.length} course${categoryCourses.length > 1 ? 's' : ''} available`,
-            modules: [{
-              id: categoryId,
-              title: categoryTitles[categoryId] || categoryId,
-              description: `${categoryCourses.length} course${categoryCourses.length > 1 ? 's' : ''} available`,
-              courses: categoryCourses,
-              icon: TrendingUp,
-              color: "bg-blue-100 text-blue-600"
-            }],
+            courses: categoryCourses,
             icon: TrendingUp,
             color: "bg-blue-100 text-blue-600"
-          };
-        });
+          }],
+          icon: TrendingUp,
+          color: "bg-blue-100 text-blue-600"
+        }));
 
         setCategories(categoryData);
       };
@@ -197,609 +355,7 @@ export default function LearnPage() {
     }
   }, [courses]);
 
-  // Generate mock data as fallback if no real data available
-  const generateFallbackCourses = () => {
-    const courseData: Course[] = [
-        // Stock Market Foundations
-        {
-          id: "stock-foundations-001",
-          title: "Stock Market Foundations",
-          description: "Beginner friendly introduction to stock market basics",
-          category: "stock-market",
-          module: "stock-foundations",
-          level: "beginner",
-          duration: "2-3 hours",
-          lessons: 10,
-          topics: ["How the stock market works", "Primary vs secondary market", "IPO basics", "Market indices", "Trading hours"],
-          isEnrolled: true,
-          progress: 60,
-          xpReward: 150,
-          importance: "high",
-          icon: TrendingUp,
-          color: "bg-blue-100 text-blue-600",
-          filePath: "/courses/stock-market-foundations/"
-        },
-        // Mutual Funds
-        {
-          id: "mutual-funds-001",
-          title: "Mutual Funds Deep Dive",
-          description: "Comprehensive guide to mutual fund investing",
-          category: "mutual-funds",
-          module: "mutual-funds-deep-dive",
-          level: "intermediate",
-          duration: "3-4 hours",
-          lessons: 11,
-          topics: ["Types of mutual funds", "Index vs active funds", "How NAV works", "Expense ratio", "Fund management"],
-          isEnrolled: false,
-          progress: 0,
-          xpReward: 200,
-          importance: "high",
-          icon: PieChart,
-          color: "bg-green-100 text-green-600",
-          filePath: "/courses/mutual-funds-deep-dive/"
-        },
-        // SIP & Wealth Building
-        {
-          id: "sip-wealth-001",
-          title: "SIP & Wealth Building",
-          description: "Master systematic investment and wealth creation",
-          category: "wealth-building",
-          module: "sip-wealth-building",
-          level: "beginner",
-          duration: "2-3 hours",
-          lessons: 9,
-          topics: ["SIP vs lump-sum", "Power of compounding", "SIP calculations", "Financial goals", "Asset allocation"],
-          isEnrolled: true,
-          progress: 30,
-          xpReward: 175,
-          importance: "high",
-          icon: PiggyBank,
-          color: "bg-purple-100 text-purple-600",
-          filePath: "/courses/sip-wealth-building/"
-        },
-        // Behavioral Finance
-        {
-          id: "behavioral-finance-001",
-          title: "Behavioral Finance Psychology",
-          description: "Understanding the psychology of investing",
-          category: "psychology",
-          module: "behavioral-finance-psychology",
-          level: "intermediate",
-          duration: "1-2 hours",
-          lessons: 5,
-          topics: ["Cognitive biases", "Emotional investing", "Decision making", "Market psychology", "Discipline building"],
-          isEnrolled: false,
-          progress: 0,
-          xpReward: 125,
-          importance: "medium",
-          icon: Brain,
-          color: "bg-orange-100 text-orange-600",
-          filePath: "/courses/behavioral-finance-psychology/"
-        },
-        // Risk Management
-        {
-          id: "risk-management-001",
-          title: "Risk Management & Safety",
-          description: "Learn to protect your investments",
-          category: "risk-management",
-          module: "risk-management-safety",
-          level: "beginner",
-          duration: "2-3 hours",
-          lessons: 7,
-          topics: ["Understanding volatility", "Risk measurement", "Drawdowns", "Diversification", "Emergency funds"],
-          isEnrolled: true,
-          progress: 45,
-          xpReward: 150,
-          importance: "high",
-          icon: Shield,
-          color: "bg-red-100 text-red-600",
-          filePath: "/courses/risk-management-safety/"
-        },
-        // Scam Awareness
-        {
-          id: "scam-awareness-001",
-          title: "Scam Awareness",
-          description: "VERY IMPORTANT - Protect yourself from fraud",
-          category: "safety",
-          module: "scam-awareness",
-          level: "beginner",
-          duration: "1-2 hours",
-          lessons: 7,
-          topics: ["Stock market fraud", "Pump and dump schemes", "WhatsApp scams", "Broker verification", "Ponzi schemes"],
-          isEnrolled: true,
-          progress: 80,
-          xpReward: 100,
-          importance: "critical",
-          icon: AlertTriangle,
-          color: "bg-yellow-100 text-yellow-800",
-          filePath: "/courses/scam-awareness/"
-        },
-        // Options Trading
-        {
-          id: "options-basics-001",
-          title: "Options Trading (Educational)",
-          description: "SEBI Safe - For education purposes only",
-          category: "derivatives",
-          module: "financial-derivatives",
-          level: "advanced",
-          duration: "2-3 hours",
-          lessons: 6,
-          topics: ["Options basics", "Call and put options", "Premiums", "Time decay", "Risk management"],
-          isEnrolled: false,
-          progress: 0,
-          xpReward: 200,
-          importance: "medium",
-          warning: "For educational purposes only - Not trading advice",
-          icon: Calculator,
-          color: "bg-indigo-100 text-indigo-600",
-          filePath: "/courses/financial-derivatives/"
-        },
-        // Personal Finance
-        {
-          id: "personal-finance-001",
-          title: "Personal Finance Basics",
-          description: "Essential money management skills",
-          category: "personal-finance",
-          module: "money-basics",
-          level: "beginner",
-          duration: "2-3 hours",
-          lessons: 8,
-          topics: ["Budgeting", "Credit score", "Good vs bad debt", "Saving vs investing", "Tax planning"],
-          isEnrolled: true,
-          progress: 20,
-          xpReward: 175,
-          importance: "high",
-          icon: Home,
-          color: "bg-teal-100 text-teal-600",
-          filePath: "/courses/money-basics/"
-        },
-        // Financial Planning
-        {
-          id: "financial-planning-001",
-          title: "Financial Planning Guide",
-          description: "Create your personal financial roadmap",
-          category: "planning",
-          module: "module-01-money-basics",
-          level: "beginner",
-          duration: "1-2 hours",
-          lessons: 6,
-          topics: ["Money planning", "Financial goals", "Investment amounts", "Lifestyle inflation", "Money habits"],
-          isEnrolled: false,
-          progress: 0,
-          xpReward: 125,
-          importance: "high",
-          icon: GraduationCap,
-          color: "bg-pink-100 text-pink-600",
-          filePath: "/courses/module-01-money-basics/"
-        },
-        // Banking & Insurance
-        {
-          id: "banking-insurance-001",
-          title: "Banking & Insurance Fundamentals",
-          description: "Understanding banking systems and insurance products",
-          category: "banking",
-          module: "banking-insurance",
-          level: "beginner",
-          duration: "2-3 hours",
-          lessons: 8,
-          topics: ["Banking fundamentals", "Digital banking", "Loans", "Insurance basics", "Risk management"],
-          isEnrolled: false,
-          progress: 0,
-          xpReward: 150,
-          importance: "medium",
-          icon: CreditCard,
-          color: "bg-cyan-100 text-cyan-600",
-          filePath: "/courses/banking-insurance/"
-        },
-        // Retirement Planning
-        {
-          id: "retirement-planning-001",
-          title: "Retirement Planning Basics",
-          description: "Plan for your financial future and retirement",
-          category: "retirement",
-          module: "retirement-planning",
-          level: "intermediate",
-          duration: "2-3 hours",
-          lessons: 10,
-          topics: ["Retirement fundamentals", "Corpus calculation", "Investment options", "NPS", "Withdrawal strategies"],
-          isEnrolled: false,
-          progress: 0,
-          xpReward: 200,
-          importance: "high",
-          icon: Umbrella,
-          color: "bg-purple-100 text-purple-600",
-          filePath: "/courses/retirement-planning/"
-        },
-        // Real Estate Investment
-        {
-          id: "real-estate-001",
-          title: "Real Estate Investment",
-          description: "Learn about property investment and REITs",
-          category: "real-estate",
-          module: "real-estate-investment",
-          level: "advanced",
-          duration: "3-4 hours",
-          lessons: 10,
-          topics: ["Property investment", "Market analysis", "Financing", "Legal aspects", "REITs"],
-          isEnrolled: false,
-          progress: 0,
-          xpReward: 250,
-          importance: "medium",
-          icon: Home,
-          color: "bg-green-100 text-green-600",
-          filePath: "/courses/real-estate-investment/"
-        },
-        // Tax Planning
-        {
-          id: "tax-planning-001",
-          title: "Tax Planning Essentials",
-          description: "Master tax-saving strategies and compliance",
-          category: "tax-planning",
-          module: "tax-planning-essentials",
-          level: "intermediate",
-          duration: "2-3 hours",
-          lessons: 8,
-          topics: ["Tax basics", "Income tax slabs", "Deductions", "Capital gains", "Tax filing"],
-          isEnrolled: false,
-          progress: 0,
-          xpReward: 175,
-          importance: "high",
-          icon: Calculator,
-          color: "bg-blue-100 text-blue-600",
-          filePath: "/courses/tax-planning-essentials/"
-        },
-        // Emergency Fund & Debt Management
-        {
-          id: "emergency-fund-001",
-          title: "Emergency Fund & Debt Management",
-          description: "Build financial safety nets and manage debt effectively",
-          category: "emergency-fund",
-          module: "emergency-fund-debt",
-          level: "beginner",
-          duration: "2-3 hours",
-          lessons: 7,
-          topics: ["Emergency fund basics", "Calculating needs", "Debt types", "Debt elimination", "Financial security"],
-          isEnrolled: true,
-          progress: 35,
-          xpReward: 125,
-          importance: "high",
-          icon: Shield,
-          color: "bg-red-100 text-red-600",
-          filePath: "/courses/emergency-fund-debt/"
-        },
-        // Indian Financial System
-        {
-          id: "indian-financial-001",
-          title: "Indian Financial System",
-          description: "Understanding India's financial infrastructure and regulations",
-          category: "financial-system",
-          module: "indian-financial-system",
-          level: "beginner",
-          duration: "2-3 hours",
-          lessons: 10,
-          topics: ["Financial system overview", "RBI functions", "Banking structure", "Capital markets", "Regulatory framework"],
-          isEnrolled: false,
-          progress: 0,
-          xpReward: 150,
-          importance: "medium",
-          icon: Briefcase,
-          color: "bg-indigo-100 text-indigo-600",
-          filePath: "/courses/indian-financial-system/"
-        },
-        // Advanced Investment Strategies
-        {
-          id: "advanced-strategies-001",
-          title: "Advanced Investment Strategies",
-          description: "Sophisticated investment techniques for experienced investors",
-          category: "advanced-strategies",
-          module: "advanced-investment-strategies",
-          level: "advanced",
-          duration: "4-5 hours",
-          lessons: 10,
-          topics: ["Portfolio theory", "Asset allocation", "Alternative investments", "International investing", "Risk management"],
-          isEnrolled: false,
-          progress: 0,
-          xpReward: 300,
-          importance: "medium",
-          icon: TrendingUp,
-          color: "bg-purple-100 text-purple-600",
-          filePath: "/courses/advanced-investment-strategies/"
-        },
-        // Stock Market Analysis
-        {
-          id: "stock-analysis-001",
-          title: "Stock Market Analysis",
-          description: "Learn fundamental and technical analysis techniques",
-          category: "market-analysis",
-          module: "stock-market-analysis",
-          level: "intermediate",
-          duration: "3-4 hours",
-          lessons: 12,
-          topics: ["Fundamental analysis", "Financial statements", "Ratio analysis", "Technical analysis", "Market patterns"],
-          isEnrolled: false,
-          progress: 0,
-          xpReward: 225,
-          importance: "high",
-          icon: BarChart3,
-          color: "bg-blue-100 text-blue-600",
-          filePath: "/courses/stock-market-analysis/"
-        }
-      ];
 
-      // Generate categories from courses
-      const categoryMap = new Map<string, Course[]>();
-      courseData.forEach(course => {
-        if (!categoryMap.has(course.category)) {
-          categoryMap.set(course.category, []);
-        }
-        categoryMap.get(course.category)?.push(course);
-      });
-
-      const categoryData: Category[] = [
-        {
-          id: "stock-market",
-          title: "Stock Market",
-          description: "Learn stock market basics and advanced trading strategies",
-          modules: [{
-            id: "stock-foundations",
-            title: "Stock Market Foundations",
-            description: "Master the fundamentals of stock market investing",
-            courses: categoryMap.get("stock-market") || [],
-            icon: TrendingUp,
-            color: "bg-blue-100 text-blue-600"
-          }],
-          icon: TrendingUp,
-          color: "bg-blue-100 text-blue-600"
-        },
-        {
-          id: "mutual-funds",
-          title: "Mutual Funds",
-          description: "Comprehensive mutual fund education and strategies",
-          modules: [{
-            id: "mutual-funds-deep-dive",
-            title: "Mutual Funds Deep Dive",
-            description: "Everything you need to know about mutual funds",
-            courses: categoryMap.get("mutual-funds") || [],
-            icon: PieChart,
-            color: "bg-green-100 text-green-600"
-          }],
-          icon: PieChart,
-          color: "bg-green-100 text-green-600"
-        },
-        {
-          id: "wealth-building",
-          title: "Wealth Building",
-          description: "Build long-term wealth through systematic investing",
-          modules: [{
-            id: "sip-wealth-building",
-            title: "SIP & Wealth Building",
-            description: "Master systematic investment planning",
-            courses: categoryMap.get("wealth-building") || [],
-            icon: PiggyBank,
-            color: "bg-purple-100 text-purple-600"
-          }],
-          icon: PiggyBank,
-          color: "bg-purple-100 text-purple-600"
-        },
-        {
-          id: "psychology",
-          title: "Behavioral Finance",
-          description: "Understand the psychology behind investment decisions",
-          modules: [{
-            id: "behavioral-finance-psychology",
-            title: "Behavioral Finance Psychology",
-            description: "Master your investment psychology",
-            courses: categoryMap.get("psychology") || [],
-            icon: Brain,
-            color: "bg-orange-100 text-orange-600"
-          }],
-          icon: Brain,
-          color: "bg-orange-100 text-orange-600"
-        },
-        {
-          id: "risk-management",
-          title: "Risk Management",
-          description: "Learn to protect and manage investment risks",
-          modules: [{
-            id: "risk-management-safety",
-            title: "Risk Management & Safety",
-            description: "Comprehensive risk management strategies",
-            courses: categoryMap.get("risk-management") || [],
-            icon: Shield,
-            color: "bg-red-100 text-red-600"
-          }],
-          icon: Shield,
-          color: "bg-red-100 text-red-600"
-        },
-        {
-          id: "safety",
-          title: "Safety & Security",
-          description: "Protect yourself from scams and fraud",
-          modules: [{
-            id: "scam-awareness",
-            title: "Scam Awareness",
-            description: "Critical knowledge to protect your investments",
-            courses: categoryMap.get("safety") || [],
-            icon: AlertTriangle,
-            color: "bg-yellow-100 text-yellow-800"
-          }],
-          icon: AlertTriangle,
-          color: "bg-yellow-100 text-yellow-800"
-        },
-        {
-          id: "derivatives",
-          title: "Derivatives",
-          description: "Advanced derivatives education (for learning purposes)",
-          modules: [{
-            id: "financial-derivatives",
-            title: "Financial Derivatives",
-            description: "Understanding options and derivatives",
-            courses: categoryMap.get("derivatives") || [],
-            icon: Calculator,
-            color: "bg-indigo-100 text-indigo-600"
-          }],
-          icon: Calculator,
-          color: "bg-indigo-100 text-indigo-600"
-        },
-        {
-          id: "personal-finance",
-          title: "Personal Finance",
-          description: "Essential money management and personal finance skills",
-          modules: [{
-            id: "money-basics",
-            title: "Money Basics",
-            description: "Fundamental personal finance concepts",
-            courses: categoryMap.get("personal-finance") || [],
-            icon: Home,
-            color: "bg-teal-100 text-teal-600"
-          }],
-          icon: Home,
-          color: "bg-teal-100 text-teal-600"
-        },
-        {
-          id: "planning",
-          title: "Financial Planning",
-          description: "Create comprehensive financial plans for your future",
-          modules: [{
-            id: "module-01-money-basics",
-            title: "Financial Planning Basics",
-            description: "Essential financial planning concepts",
-            courses: categoryMap.get("planning") || [],
-            icon: GraduationCap,
-            color: "bg-pink-100 text-pink-600"
-          }],
-          icon: GraduationCap,
-          color: "bg-pink-100 text-pink-600"
-        },
-        {
-          id: "banking",
-          title: "Banking & Insurance",
-          description: "Understanding banking systems and insurance products",
-          modules: [{
-            id: "banking-insurance",
-            title: "Banking & Insurance",
-            description: "Comprehensive banking and insurance education",
-            courses: categoryMap.get("banking") || [],
-            icon: CreditCard,
-            color: "bg-cyan-100 text-cyan-600"
-          }],
-          icon: CreditCard,
-          color: "bg-cyan-100 text-cyan-600"
-        },
-        {
-          id: "retirement",
-          title: "Retirement Planning",
-          description: "Plan for a secure financial future and retirement",
-          modules: [{
-            id: "retirement-planning",
-            title: "Retirement Planning",
-            description: "Comprehensive retirement planning strategies",
-            courses: categoryMap.get("retirement") || [],
-            icon: Umbrella,
-            color: "bg-purple-100 text-purple-600"
-          }],
-          icon: Umbrella,
-          color: "bg-purple-100 text-purple-600"
-        },
-        {
-          id: "real-estate",
-          title: "Real Estate",
-          description: "Learn about real estate investment and property management",
-          modules: [{
-            id: "real-estate-investment",
-            title: "Real Estate Investment",
-            description: "Real estate investment strategies and analysis",
-            courses: categoryMap.get("real-estate") || [],
-            icon: Home,
-            color: "bg-green-100 text-green-600"
-          }],
-          icon: Home,
-          color: "bg-green-100 text-green-600"
-        },
-        {
-          id: "tax-planning",
-          title: "Tax Planning",
-          description: "Master tax-saving strategies and compliance",
-          modules: [{
-            id: "tax-planning-essentials",
-            title: "Tax Planning Essentials",
-            description: "Essential tax planning knowledge and strategies",
-            courses: categoryMap.get("tax-planning") || [],
-            icon: Calculator,
-            color: "bg-blue-100 text-blue-600"
-          }],
-          icon: Calculator,
-          color: "bg-blue-100 text-blue-600"
-        },
-        {
-          id: "emergency-fund",
-          title: "Emergency Fund & Debt",
-          description: "Build financial safety nets and manage debt",
-          modules: [{
-            id: "emergency-fund-debt",
-            title: "Emergency Fund & Debt Management",
-            description: "Essential emergency fund and debt management strategies",
-            courses: categoryMap.get("emergency-fund") || [],
-            icon: Shield,
-            color: "bg-red-100 text-red-600"
-          }],
-          icon: Shield,
-          color: "bg-red-100 text-red-600"
-        },
-        {
-          id: "financial-system",
-          title: "Financial System",
-          description: "Understanding India's financial infrastructure",
-          modules: [{
-            id: "indian-financial-system",
-            title: "Indian Financial System",
-            description: "Comprehensive understanding of Indian financial system",
-            courses: categoryMap.get("financial-system") || [],
-            icon: Briefcase,
-            color: "bg-indigo-100 text-indigo-600"
-          }],
-          icon: Briefcase,
-          color: "bg-indigo-100 text-indigo-600"
-        },
-        {
-          id: "advanced-strategies",
-          title: "Advanced Strategies",
-          description: "Sophisticated investment techniques for experienced investors",
-          modules: [{
-            id: "advanced-investment-strategies",
-            title: "Advanced Investment Strategies",
-            description: "Advanced investment strategies and techniques",
-            courses: categoryMap.get("advanced-strategies") || [],
-            icon: TrendingUp,
-            color: "bg-purple-100 text-purple-600"
-          }],
-          icon: TrendingUp,
-          color: "bg-purple-100 text-purple-600"
-        },
-        {
-          id: "market-analysis",
-          title: "Market Analysis",
-          description: "Learn fundamental and technical analysis techniques",
-          modules: [{
-            id: "stock-market-analysis",
-            title: "Stock Market Analysis",
-            description: "Comprehensive stock market analysis techniques",
-            courses: categoryMap.get("market-analysis") || [],
-            icon: BarChart3,
-            color: "bg-blue-100 text-blue-600"
-          }],
-          icon: BarChart3,
-          color: "bg-blue-100 text-blue-600"
-        }
-      ];
-
-      setCourses(courseData);
-      setCategories(categoryData);
-      setLoading(false);
-    };
-
-    generateCourses();
-  }, []);
 
   const learningPaths = [
     {
@@ -901,10 +457,10 @@ export default function LearnPage() {
 
   const stats = {
     totalCategories: categories.length,
-    completedCategories: 1,
+    completedCategories: courses.filter(c => c.progress === 100).length,
     totalTopics: courses.reduce((sum, course) => sum + course.lessons, 0),
-    completedTopics: 35,
-    totalXp: courses.reduce((sum, course) => sum + course.xpReward, 0),
+    completedTopics: Math.round(courses.reduce((sum, course) => sum + (course.progress * course.lessons / 100), 0)),
+    totalXp: userData?.totalXp || 2500,
     currentStreak: 5,
     learningHours: 18
   };
