@@ -47,6 +47,8 @@ export default function LessonViewer() {
 
   const [course, setCourse] = useState<Course | null>(null);
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
+  const [nextLesson, setNextLesson] = useState<Lesson | null>(null);
+  const [previousLesson, setPreviousLesson] = useState<Lesson | null>(null);
   const [loading, setLoading] = useState(true);
   const [timeSpent, setTimeSpent] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
@@ -66,34 +68,35 @@ export default function LessonViewer() {
     const fetchLessonData = async () => {
       try {
         const userId = "demo-user-id";
-        const response = await fetch(`/api/learn/courses?userId=${userId}`);
+        const response = await fetch(`/api/learn/lesson/${courseId}/${lessonId}`);
         const data = await response.json();
         
-        if (response.ok) {
-          const foundCourse = data.courses.find((c: Course) => c.id === courseId);
-          if (foundCourse) {
-            setCourse(foundCourse);
-            
-            const foundLesson = foundCourse.lessonsList.find((l: Lesson) => l.id === lessonId);
-            if (foundLesson) {
-              setCurrentLesson(foundLesson);
-              
-              // Start lesson tracking
-              await fetch('/api/learn/progress', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  userId,
-                  courseId,
-                  lessonId,
-                  action: 'start_lesson'
-                })
-              });
-            }
-          }
+        if (response.ok && data.success) {
+          setCourse(data.course);
+          setCurrentLesson(data.currentLesson);
+          setNextLesson(data.nextLesson);
+          setPreviousLesson(data.previousLesson);
+          
+          // Start lesson tracking
+          await fetch('/api/learn/progress', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId,
+              courseId,
+              lessonId,
+              action: 'start_lesson'
+            })
+          });
+        } else {
+          console.error("Failed to fetch lesson data:", data.error);
+          alert("Lesson not found. Please check the URL and try again.");
+          router.push('/learn');
         }
       } catch (error) {
         console.error("Error fetching lesson data:", error);
+        alert("Failed to load lesson. Please try again.");
+        router.push('/learn');
       } finally {
         setLoading(false);
       }
@@ -148,23 +151,13 @@ export default function LessonViewer() {
   };
 
   const goToPreviousLesson = () => {
-    if (!course || !currentLesson) return;
-    
-    const currentIndex = course.lessonsList.findIndex(l => l.id === currentLesson.id);
-    if (currentIndex > 0) {
-      const prevLesson = course.lessonsList[currentIndex - 1];
-      router.push(`/learn/lesson/${courseId}/${prevLesson.id}`);
-    }
+    if (!previousLesson) return;
+    router.push(`/learn/lesson/${courseId}/${previousLesson.id}`);
   };
 
   const goToNextLesson = () => {
-    if (!course || !currentLesson) return;
-    
-    const currentIndex = course.lessonsList.findIndex(l => l.id === currentLesson.id);
-    if (currentIndex < course.lessonsList.length - 1) {
-      const nextLesson = course.lessonsList[currentIndex + 1];
-      router.push(`/learn/lesson/${courseId}/${nextLesson.id}`);
-    }
+    if (!nextLesson) return;
+    router.push(`/learn/lesson/${courseId}/${nextLesson.id}`);
   };
 
   if (loading) {

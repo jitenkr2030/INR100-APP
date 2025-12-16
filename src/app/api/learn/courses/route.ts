@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
     // Define available courses with their file paths
     const courseDefinitions = [
       {
-        id: "stock-foundations-001",
+        id: "stock-market-foundations",
         title: "Stock Market Foundations",
         description: "Beginner friendly introduction to stock market basics",
         category: "stock-market",
@@ -93,10 +93,10 @@ export async function GET(request: NextRequest) {
         importance: "high" as const,
         icon: "TrendingUp",
         color: "bg-blue-100 text-blue-600",
-        filePath: "stock-market-foundations"
+        filePath: "/workspace/INR100-APP/courses/Module-01-Stock-Market-Foundations"
       },
       {
-        id: "mutual-funds-001",
+        id: "mutual-funds-deep-dive",
         title: "Mutual Funds Deep Dive",
         description: "Comprehensive guide to mutual fund investing",
         category: "mutual-funds",
@@ -111,10 +111,10 @@ export async function GET(request: NextRequest) {
         importance: "high" as const,
         icon: "PieChart",
         color: "bg-green-100 text-green-600",
-        filePath: "mutual-funds-deep-dive"
+        filePath: "/workspace/INR100-APP/courses/mutual-funds-deep-dive"
       },
       {
-        id: "sip-wealth-001",
+        id: "sip-wealth-building",
         title: "SIP & Wealth Building",
         description: "Master systematic investment and wealth creation",
         category: "wealth-building",
@@ -129,10 +129,10 @@ export async function GET(request: NextRequest) {
         importance: "high" as const,
         icon: "PiggyBank",
         color: "bg-purple-100 text-purple-600",
-        filePath: "sip-wealth-building"
+        filePath: "/workspace/INR100-APP/courses/Module-03-SIP-Wealth-Building"
       },
       {
-        id: "behavioral-finance-001",
+        id: "behavioral-finance-psychology",
         title: "Behavioral Finance Psychology",
         description: "Understanding the psychology of investing",
         category: "psychology",
@@ -147,10 +147,10 @@ export async function GET(request: NextRequest) {
         importance: "medium" as const,
         icon: "Brain",
         color: "bg-orange-100 text-orange-600",
-        filePath: "behavioral-finance-psychology"
+        filePath: "/workspace/INR100-APP/courses/behavioral-finance-psychology"
       },
       {
-        id: "risk-management-001",
+        id: "risk-management",
         title: "Risk Management & Safety",
         description: "Learn to protect your investments",
         category: "risk-management",
@@ -165,7 +165,7 @@ export async function GET(request: NextRequest) {
         importance: "high" as const,
         icon: "Shield",
         color: "bg-red-100 text-red-600",
-        filePath: "risk-management-safety"
+        filePath: "/workspace/INR100-APP/courses/Module-10-Risk-Management"
       },
       {
         id: "scam-awareness-001",
