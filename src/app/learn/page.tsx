@@ -110,6 +110,8 @@ export default function LearnPage() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showCourseModal, setShowCourseModal] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 
   // Mock course data based on the actual course structure
   useEffect(() => {
@@ -824,6 +826,37 @@ export default function LearnPage() {
     learningHours: 18
   };
 
+  const handleEnrollCourse = (courseId: string) => {
+    setCourses(prevCourses => 
+      prevCourses.map(course => 
+        course.id === courseId 
+          ? { ...course, isEnrolled: true, progress: 0 }
+          : course
+      )
+    );
+    // Show success notification (you could add a toast notification here)
+    console.log(`Enrolled in course: ${courseId}`);
+  };
+
+  const handleStartLearning = (course: Course) => {
+    // Redirect to course content or learning interface
+    console.log(`Starting learning for: ${course.title}`);
+    // You could use router.push(`/learn/course/${course.id}`) here
+    alert(`Starting "${course.title}" course!`);
+  };
+
+  const handleViewCourse = (course: Course) => {
+    setSelectedCourse(course);
+    setShowCourseModal(true);
+  };
+
+  const handleContinueLearning = (course: Course) => {
+    // Continue from where user left off
+    console.log(`Continuing learning for: ${course.title}`);
+    // You could use router.push(`/learn/course/${course.id}?continue=true`) here
+    alert(`Continuing "${course.title}" course from ${course.progress}% progress!`);
+  };
+
   const getFilteredCourses = () => {
     return courses.filter(course => {
       const matchesCategory = selectedCategory === "all" || course.category === selectedCategory;
@@ -938,15 +971,26 @@ export default function LearnPage() {
           {/* Action */}
           <div className="flex space-x-2">
             {course.isEnrolled ? (
-              <Button className="flex-1 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700">
+              <Button 
+                className="flex-1 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
+                onClick={() => course.progress > 0 ? handleContinueLearning(course) : handleStartLearning(course)}
+              >
                 {course.progress > 0 ? "Continue Learning" : "Start Course"}
               </Button>
             ) : (
-              <Button className="flex-1 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700">
+              <Button 
+                className="flex-1 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
+                onClick={() => handleEnrollCourse(course.id)}
+              >
                 Enroll Now
               </Button>
             )}
-            <Button variant="outline" size="icon">
+            <Button 
+              variant="outline" 
+              size="icon"
+              onClick={() => handleViewCourse(course)}
+              title="View Course Details"
+            >
               <Eye className="h-4 w-4" />
             </Button>
           </div>
@@ -1302,6 +1346,153 @@ export default function LearnPage() {
             </div>
           </TabsContent>
         </Tabs>
+
+        {/* Course Details Modal */}
+        {showCourseModal && selectedCourse && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+              <div className="p-6">
+                <div className="flex items-start justify-between mb-6">
+                  <div className="flex items-start space-x-4">
+                    <div className={`p-4 rounded-lg ${selectedCourse.color}`}>
+                      <selectedCourse.icon className="h-8 w-8" />
+                    </div>
+                    <div>
+                      <h2 className="text-2xl font-bold text-gray-900">{selectedCourse.title}</h2>
+                      <p className="text-gray-600 mt-1">{selectedCourse.description}</p>
+                      <div className="flex items-center space-x-2 mt-2">
+                        <Badge className={
+                          selectedCourse.level === "beginner" ? "bg-green-100 text-green-800" :
+                          selectedCourse.level === "intermediate" ? "bg-yellow-100 text-yellow-800" :
+                          "bg-red-100 text-red-800"
+                        }>
+                          {selectedCourse.level}
+                        </Badge>
+                        {selectedCourse.importance === "critical" && (
+                          <Badge className="bg-red-100 text-red-800">
+                            <AlertTriangle className="h-3 w-3 mr-1" />
+                            CRITICAL
+                          </Badge>
+                        )}
+                        {selectedCourse.importance === "high" && (
+                          <Badge className="bg-orange-100 text-orange-800">
+                            <Star className="h-3 w-3 mr-1" />
+                            IMPORTANT
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="icon"
+                    onClick={() => setShowCourseModal(false)}
+                  >
+                    <XCircle className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                {/* Course Warning */}
+                {selectedCourse.warning && (
+                  <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg mb-6">
+                    <div className="flex items-center space-x-2">
+                      <AlertCircle className="h-5 w-5 text-yellow-600" />
+                      <p className="text-yellow-800 font-medium">{selectedCourse.warning}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Course Details */}
+                <div className="grid md:grid-cols-2 gap-6 mb-6">
+                  <div>
+                    <h3 className="font-semibold text-lg mb-3">Course Information</h3>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center space-x-2">
+                        <Clock className="h-4 w-4 text-gray-500" />
+                        <span>Duration: {selectedCourse.duration}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <FileText className="h-4 w-4 text-gray-500" />
+                        <span>Lessons: {selectedCourse.lessons}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Target className="h-4 w-4 text-gray-500" />
+                        <span>Topics: {selectedCourse.topics.length}</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Trophy className="h-4 w-4 text-gray-500" />
+                        <span>XP Reward: +{selectedCourse.xpReward} XP</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="font-semibold text-lg mb-3">Learning Progress</h3>
+                    {selectedCourse.isEnrolled ? (
+                      <div className="space-y-3">
+                        <div className="flex justify-between text-sm">
+                          <span>Progress</span>
+                          <span>{selectedCourse.progress}%</span>
+                        </div>
+                        <Progress value={selectedCourse.progress} className="h-2" />
+                        <p className="text-sm text-gray-600">
+                          {selectedCourse.progress === 0 ? "Not started" : 
+                           selectedCourse.progress === 100 ? "Completed" : 
+                           "In progress"}
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="text-sm text-gray-600">
+                        Not enrolled yet
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Topics */}
+                <div className="mb-6">
+                  <h3 className="font-semibold text-lg mb-3">Course Topics</h3>
+                  <div className="grid md:grid-cols-2 gap-2">
+                    {selectedCourse.topics.map((topic, index) => (
+                      <div key={index} className="flex items-center space-x-2 text-sm">
+                        <CheckCircle className="h-4 w-4 text-green-500" />
+                        <span>{topic}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex space-x-3">
+                  {selectedCourse.isEnrolled ? (
+                    <Button 
+                      className="flex-1 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
+                      onClick={() => {
+                        selectedCourse.progress > 0 ? handleContinueLearning(selectedCourse) : handleStartLearning(selectedCourse);
+                        setShowCourseModal(false);
+                      }}
+                    >
+                      {selectedCourse.progress > 0 ? "Continue Learning" : "Start Course"}
+                    </Button>
+                  ) : (
+                    <Button 
+                      className="flex-1 bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
+                      onClick={() => {
+                        handleEnrollCourse(selectedCourse.id);
+                        setShowCourseModal(false);
+                      }}
+                    >
+                      Enroll Now
+                    </Button>
+                  )}
+                  <Button variant="outline" onClick={() => setShowCourseModal(false)}>
+                    Close
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </DashboardLayout>
   );
