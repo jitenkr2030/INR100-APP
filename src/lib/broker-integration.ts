@@ -265,3 +265,4 @@ export class MockBrokerIntegration extends BrokerIntegration {
 }
 
 export default BrokerIntegration;
+export const brokerIntegrationService = new BrokerIntegration();

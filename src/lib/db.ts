@@ -62,3 +62,4 @@ export async function databaseHealthCheck() {
 }
 
 export default prisma;
+export const db = prisma;
