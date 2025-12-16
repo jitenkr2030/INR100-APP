@@ -136,8 +136,15 @@ export default function LearnPage() {
         const data = await response.json();
         
         if (response.ok) {
+          console.log("Courses API response:", data);
           setCourses(data.courses || []);
           setUserData(data.user);
+          
+          // Log first course for debugging
+          if (data.courses && data.courses.length > 0) {
+            console.log("First course loaded:", data.courses[0]);
+            console.log("Course lessonsList:", data.courses[0].lessonsList);
+          }
         } else {
           console.error("Failed to fetch courses:", data.error);
           generateFallbackCourses();
@@ -510,13 +517,18 @@ export default function LearnPage() {
   };
 
   const handleStartLearning = (course: Course) => {
+    console.log("handleStartLearning called for course:", course.id, course.title);
+    
     if (!course.isEnrolled) {
+      console.log("Course not enrolled, calling handleEnrollCourse");
       handleEnrollCourse(course.id);
       return;
     }
     
     // Navigate to lesson viewer
-    window.location.href = `/learn/lesson/${course.id}/${course.lessonsList?.[0]?.id || 'lesson-01'}`;
+    const lessonId = course.lessonsList?.[0]?.id || 'lesson-01';
+    console.log("Navigating to:", `/learn/lesson/${course.id}/${lessonId}`);
+    window.location.href = `/learn/lesson/${course.id}/${lessonId}`;
   };
 
   const handleViewCourse = (course: Course) => {
@@ -525,14 +537,21 @@ export default function LearnPage() {
   };
 
   const handleContinueLearning = (course: Course) => {
+    console.log("handleContinueLearning called for course:", course.id, course.title);
+    
     // Navigate to continue from last lesson
     const nextLessonId = course.lessonsList?.find(lesson => 
       !course.completedLessons?.includes(lesson.id)
     )?.id;
     
+    console.log("Next lesson ID found:", nextLessonId);
+    
     if (nextLessonId) {
-      window.location.href = `/learn/lesson/${course.id}/${nextLessonId}?continue=true`;
+      const url = `/learn/lesson/${course.id}/${nextLessonId}?continue=true`;
+      console.log("Continuing to:", url);
+      window.location.href = url;
     } else {
+      console.log("All lessons completed");
       alert(`You've completed all lessons in "${course.title}"! 🎉`);
     }
   };
