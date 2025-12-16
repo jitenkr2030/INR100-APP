@@ -5,10 +5,37 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MainLayout } from "@/components/layout/main-layout";
-import { ArrowRight, TrendingUp, Shield, Users, Award, Smartphone, BarChart3, Target, Gift, Star } from "lucide-react";
+import { 
+  ArrowRight, 
+  TrendingUp, 
+  Shield, 
+  Users, 
+  Award, 
+  Smartphone, 
+  BarChart3, 
+  Target, 
+  Gift, 
+  Star,
+  Zap,
+  Globe,
+  Lock,
+  CreditCard,
+  PieChart,
+  TrendingDown
+} from "lucide-react";
 
 export default function Home() {
   const router = useRouter();
+
+  const handleMobileAppClick = () => {
+    // In production, this would redirect to app stores or show a modal
+    router.push('/mobile-app');
+  };
+
+  const handleDownloadApp = () => {
+    // In production, this would show download options or redirect to stores
+    router.push('/download-app');
+  };
 
   return (
     <MainLayout>
@@ -48,18 +75,22 @@ export default function Home() {
               <div className="text-center">
                 <div className="text-3xl font-bold text-green-600">10L+</div>
                 <div className="text-gray-600">Happy Investors</div>
+                <div className="text-sm text-gray-500 mt-1">Trust our platform</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-blue-600">₹100</div>
                 <div className="text-gray-600">Minimum Investment</div>
+                <div className="text-sm text-gray-500 mt-1">Start small, grow big</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-purple-600">500+</div>
                 <div className="text-gray-600">Investment Options</div>
+                <div className="text-sm text-gray-500 mt-1">Diverse portfolio</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-orange-600">24/7</div>
                 <div className="text-gray-600">AI Support</div>
+                <div className="text-sm text-gray-500 mt-1">Always available</div>
               </div>
             </div>
           </div>
@@ -153,9 +184,7 @@ export default function Home() {
               
               <Card 
                 className="border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
-                onClick={() => {
-                  alert('Mobile app coming soon!');
-                }}
+                onClick={handleMobileAppClick}
               >
                 <CardHeader>
                   <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
@@ -227,12 +256,14 @@ export default function Home() {
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               <Card 
-                className="text-center border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+                className="text-center border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1"
                 onClick={() => router.push('/invest?category=stocks')}
               >
                 <CardHeader>
-                  <div className="text-4xl mb-4">📈</div>
-                  <CardTitle>Stocks</CardTitle>
+                  <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <TrendingUp className="h-8 w-8 text-green-600" />
+                  </div>
+                  <CardTitle className="text-xl">Stocks</CardTitle>
                   <CardDescription>
                     Invest in top Indian companies with fractional shares starting from ₹100
                   </CardDescription>
@@ -240,12 +271,14 @@ export default function Home() {
               </Card>
               
               <Card 
-                className="text-center border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+                className="text-center border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1"
                 onClick={() => router.push('/invest?category=mutual-funds')}
               >
                 <CardHeader>
-                  <div className="text-4xl mb-4">🏦</div>
-                  <CardTitle>Mutual Funds</CardTitle>
+                  <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <PieChart className="h-8 w-8 text-blue-600" />
+                  </div>
+                  <CardTitle className="text-xl">Mutual Funds</CardTitle>
                   <CardDescription>
                     Access professionally managed funds with SIPs starting at ₹100
                   </CardDescription>
@@ -253,12 +286,14 @@ export default function Home() {
               </Card>
               
               <Card 
-                className="text-center border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+                className="text-center border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1"
                 onClick={() => router.push('/invest?category=gold')}
               >
                 <CardHeader>
-                  <div className="text-4xl mb-4">🥇</div>
-                  <CardTitle>Gold</CardTitle>
+                  <div className="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Award className="h-8 w-8 text-yellow-600" />
+                  </div>
+                  <CardTitle className="text-xl">Gold</CardTitle>
                   <CardDescription>
                     Invest in digital gold and gold ETFs for portfolio stability
                   </CardDescription>
@@ -266,17 +301,93 @@ export default function Home() {
               </Card>
               
               <Card 
-                className="text-center border-0 shadow-lg hover:shadow-xl transition-shadow cursor-pointer"
+                className="text-center border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer transform hover:-translate-y-1"
                 onClick={() => router.push('/invest?category=global')}
               >
                 <CardHeader>
-                  <div className="text-4xl mb-4">🌍</div>
-                  <CardTitle>Global Assets</CardTitle>
+                  <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <Globe className="h-8 w-8 text-purple-600" />
+                  </div>
+                  <CardTitle className="text-xl">Global Assets</CardTitle>
                   <CardDescription>
                     Invest in US stocks and international markets with fractional investing
                   </CardDescription>
                 </CardHeader>
               </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* Trust & Security Section */}
+        <section id="trust" className="py-20 bg-gradient-to-br from-blue-50 to-indigo-100">
+          <div className="container mx-auto px-4">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold mb-4">Trusted by Millions</h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Join the fastest-growing investment platform in India
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-16">
+              <div className="text-center">
+                <div className="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Lock className="h-10 w-10 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4">Bank-Grade Security</h3>
+                <p className="text-gray-600">
+                  Your money and data are protected with the highest security standards
+                </p>
+              </div>
+              
+              <div className="text-center">
+                <div className="w-20 h-20 bg-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Zap className="h-10 w-10 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4">Instant Processing</h3>
+                <p className="text-gray-600">
+                  Buy and sell orders executed in seconds, not minutes
+                </p>
+              </div>
+              
+              <div className="text-center">
+                <div className="w-20 h-20 bg-purple-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <CreditCard className="h-10 w-10 text-white" />
+                </div>
+                <h3 className="text-2xl font-bold mb-4">Zero Commission</h3>
+                <p className="text-gray-600">
+                  No hidden charges on investments, transparent pricing
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl shadow-xl p-8 max-w-4xl mx-auto">
+              <div className="text-center mb-8">
+                <h3 className="text-2xl font-bold mb-4">What Our Users Say</h3>
+              </div>
+              <div className="grid md:grid-cols-2 gap-8">
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <div className="flex items-center mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                    ))}
+                  </div>
+                  <p className="text-gray-700 mb-4">
+                    "INR100 made investing so simple. I started with just ₹100 and now have a diversified portfolio!"
+                  </p>
+                  <p className="font-semibold text-gray-900">- Priya Sharma, Mumbai</p>
+                </div>
+                <div className="bg-gray-50 rounded-xl p-6">
+                  <div className="flex items-center mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                    ))}
+                  </div>
+                  <p className="text-gray-700 mb-4">
+                    "The AI recommendations helped me make better investment decisions. Highly recommended!"
+                  </p>
+                  <p className="font-semibold text-gray-900">- Rajesh Kumar, Bangalore</p>
+                </div>
+              </div>
             </div>
           </div>
         </section>
@@ -342,10 +453,7 @@ export default function Home() {
                 size="lg" 
                 variant="outline" 
                 className="text-lg px-8 py-4 border-white text-white hover:bg-white hover:text-green-600"
-                onClick={() => {
-                  // For demo purposes, we can show an alert or redirect to a download page
-                  alert('Mobile app download coming soon!');
-                }}
+                onClick={handleDownloadApp}
               >
                 Download App
               </Button>
