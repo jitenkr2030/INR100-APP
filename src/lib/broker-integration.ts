@@ -265,4 +265,9 @@ export class MockBrokerIntegration extends BrokerIntegration {
 }
 
 export default BrokerIntegration;
-export const brokerIntegrationService = new BrokerIntegration();
+export const brokerIntegrationService = new BrokerIntegration({
+  apiKey: process.env.BROKER_API_KEY || 'mock-api-key',
+  apiSecret: process.env.BROKER_API_SECRET || 'mock-api-secret',
+  baseUrl: process.env.BROKER_BASE_URL || 'https://api.mock-broker.com',
+  broker: process.env.BROKER_NAME || 'mock-broker'
+});
