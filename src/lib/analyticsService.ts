@@ -142,8 +142,8 @@ export class AnalyticsService {
 
   private getHeaders(): Record<string, string> {
     return {
-      'Content/json',
-      '-Type': 'applicationAuthorization': `Bearer ${this.apiKey}`,
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.apiKey}`,
     };
   }
 
