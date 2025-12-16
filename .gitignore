@@ -76,8 +76,6 @@
 # PyBuilder
 **/.pybuilder/
 **/target/
-**/lib/
-!src/lib/
 
 # Jupyter Notebook
 **/.ipynb_checkpoints
