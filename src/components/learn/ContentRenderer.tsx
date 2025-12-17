@@ -15,6 +15,7 @@ import {
   ChevronDown,
   ChevronRight
 } from "lucide-react";
+import VideoPlayer from "./VideoPlayer";
 
 interface ContentRendererProps {
   content: {
@@ -98,15 +99,29 @@ export default function ContentRenderer({ content, className = "" }: ContentRend
         );
 
       case 'video':
+        const videoData = content.videoData || {};
         return (
           <div className="space-y-6">
-            <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
-              <div className="text-center">
-                <Video className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600">Video Content</p>
-                <p className="text-sm text-gray-500">Video player would be embedded here</p>
-              </div>
-            </div>
+            <VideoPlayer
+              videoId={videoData.id || 'default'}
+              title={videoData.title || 'Video Lesson'}
+              description={videoData.description || 'Interactive video content'}
+              duration={videoData.duration}
+              thumbnailUrl={videoData.thumbnail}
+              videoUrl={videoData.url}
+              autoPlay={videoData.autoPlay || false}
+              showControls={videoData.showControls !== false}
+              allowDownload={videoData.allowDownload || false}
+              allowShare={videoData.allowShare || false}
+              onTimeUpdate={(time) => {
+                // Track video progress
+                console.log('Video progress:', time);
+              }}
+              onComplete={() => {
+                // Handle video completion
+                console.log('Video completed');
+              }}
+            />
             {content.html && (
               <div 
                 dangerouslySetInnerHTML={{ 
@@ -214,19 +229,61 @@ function InteractiveElement({ element }: { element: any }) {
   );
 }
 
-// Calculator Component (placeholder)
+// Calculator Components
+import SIPCalculator from "./calculators/SIPCalculator";
+import CompoundInterestCalculator from "./calculators/CompoundInterestCalculator";
+import RetirementCalculator from "./calculators/RetirementCalculator";
+
 function CalculatorComponent(props: any) {
-  return (
-    <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-      <h4 className="font-medium text-blue-900 mb-2">{props.title}</h4>
-      <p className="text-blue-700 text-sm mb-3">{props.description}</p>
-      <div className="space-y-2">
-        <p className="text-sm text-blue-600">
-          Interactive calculator would be implemented here based on the lesson content.
-        </p>
-      </div>
-    </div>
-  );
+  const { type, title, description, ...calculatorProps } = props;
+  
+  switch (type) {
+    case 'sip':
+      return (
+        <div className="my-6">
+          <SIPCalculator 
+            title={title}
+            description={description}
+            {...calculatorProps}
+          />
+        </div>
+      );
+    
+    case 'compound-interest':
+      return (
+        <div className="my-6">
+          <CompoundInterestCalculator 
+            title={title}
+            description={description}
+            {...calculatorProps}
+          />
+        </div>
+      );
+    
+    case 'retirement':
+      return (
+        <div className="my-6">
+          <RetirementCalculator 
+            title={title}
+            description={description}
+            {...calculatorProps}
+          />
+        </div>
+      );
+    
+    default:
+      return (
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <h4 className="font-medium text-blue-900 mb-2">{title}</h4>
+          <p className="text-blue-700 text-sm mb-3">{description}</p>
+          <div className="space-y-2">
+            <p className="text-sm text-blue-600">
+              Interactive calculator would be implemented here based on the lesson content.
+            </p>
+          </div>
+        </div>
+      );
+  }
 }
 
 // Chart Component (placeholder)
