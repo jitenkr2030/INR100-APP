@@ -1,3 +1,31 @@
+---
+content_level: foundation-level
+difficulty: Beginner
+duration: 15 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Understand basic concepts
+- Learn fundamental principles
+- Apply practical examples
+lesson_id: MO-001
+lesson_number: '1'
+module: module-01-money-basics
+prerequisites:
+- Basic financial literacy
+related_lessons:
+- MO-001.001
+tags:
+- financial literacy
+- money
+- basics
+- fundamentals
+- financial education
+- inr100
+- beginner
+title: 010 Wealth Mindset For Beginners
+xp_reward: 50
+---
+
 # Lesson 10: Wealth Mindset for Beginners
 
 ## Course Overview

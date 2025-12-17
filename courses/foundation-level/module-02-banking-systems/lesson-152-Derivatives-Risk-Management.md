@@ -1,3 +1,34 @@
+---
+content_level: foundation-level
+difficulty: Beginner
+duration: 15 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Master derivatives concepts
+- Understand options and futures
+lesson_id: MO-001
+lesson_number: '1'
+module: module-02-banking-systems
+prerequisites:
+- Basic financial literacy
+related_lessons:
+- MO-001.001
+tags:
+- services
+- safety
+- financial education
+- derivatives
+- fundamentals
+- futures
+- trading
+- inr100
+- options
+- beginner
+- banking
+title: 152 Derivatives Risk Management
+xp_reward: 50
+---
+
 # Lesson 190: Derivatives and Risk Management Strategies
 
 ## Learning Objectives

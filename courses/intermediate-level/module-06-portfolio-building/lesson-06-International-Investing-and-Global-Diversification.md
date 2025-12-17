@@ -1,3 +1,33 @@
+---
+content_level: intermediate-level
+difficulty: Intermediate
+duration: 20 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Understand investment principles
+- Learn asset allocation
+lesson_id: MO-001
+lesson_number: '1'
+module: module-06-portfolio-building
+prerequisites:
+- Foundation Level completion
+- Basic investing knowledge
+related_lessons:
+- MO-001.001
+tags:
+- investment
+- investing
+- financial education
+- portfolio
+- inr100
+- wealth building
+- intermediate
+- analysis
+- asset allocation
+title: 06 International Investing And Global Diversification
+xp_reward: 75
+---
+
 # Lesson 06: International Investing and Global Diversification
 
 ## Learning Objectives

@@ -1,3 +1,33 @@
+---
+content_level: intermediate-level
+difficulty: Intermediate
+duration: 20 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Understand professional trading
+- Learn algorithmic strategies
+lesson_id: MO-001
+lesson_number: '1'
+module: module-05-stock-analysis
+prerequisites:
+- Foundation Level completion
+- Basic investing knowledge
+related_lessons:
+- MO-001.001
+tags:
+- stocks
+- financial education
+- equity
+- trading
+- inr100
+- professional
+- intermediate
+- analysis
+- quantitative
+title: 100 Market Microstructure Algorithmic Trading
+xp_reward: 75
+---
+
 # Lesson 146: Market Microstructure and Algorithmic Trading
 
 ## Learning Objectives

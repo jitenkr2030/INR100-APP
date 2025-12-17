@@ -1,3 +1,32 @@
+---
+content_level: foundation-level
+difficulty: Beginner
+duration: 15 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Understand mutual fund fundamentals
+- Learn NAV calculation methods
+lesson_id: MO-001
+lesson_number: '1'
+module: module-03-investing-intro
+prerequisites:
+- Basic financial literacy
+related_lessons:
+- MO-001.001
+tags:
+- mutual funds
+- introduction
+- financial education
+- fundamentals
+- inr100
+- funds
+- investing
+- beginner
+- sip
+title: 081 Types Of Mutual Funds
+xp_reward: 50
+---
+
 # Lesson 1: Types of Mutual Funds (Equity, Debt, Hybrid)
 
 ## Learning Objectives

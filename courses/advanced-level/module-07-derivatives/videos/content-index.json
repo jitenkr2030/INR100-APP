@@ -1,0 +1,29 @@
+{
+  "module": "module-07-derivatives",
+  "media_type": "videos",
+  "content_items": [
+    {
+      "filename": "lesson-01-introduction-financial-literacy.mp4",
+      "title": "Introduction to Financial Literacy",
+      "duration": "8 minutes",
+      "type": "tutorial",
+      "description": "Beginner-friendly introduction to financial concepts"
+    },
+    {
+      "filename": "lesson-02-mutual-funds-explained.mp4",
+      "title": "Mutual Funds Explained Simply",
+      "duration": "12 minutes",
+      "type": "concept",
+      "description": "Visual explanation of mutual fund basics"
+    },
+    {
+      "filename": "lesson-03-portfolio-construction-demo.mp4",
+      "title": "Portfolio Construction Demo",
+      "duration": "15 minutes",
+      "type": "demo",
+      "description": "Step-by-step portfolio building demonstration"
+    }
+  ],
+  "total_items": 3,
+  "last_updated": "2025-12-17T17:41:18.214718"
+}

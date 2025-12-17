@@ -1,3 +1,33 @@
+---
+content_level: foundation-level
+difficulty: Beginner
+duration: 15 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Understand professional trading
+- Learn algorithmic strategies
+lesson_id: MO-001
+lesson_number: '1'
+module: module-02-banking-systems
+prerequisites:
+- Basic financial literacy
+related_lessons:
+- MO-001.001
+tags:
+- services
+- safety
+- financial education
+- fundamentals
+- trading
+- inr100
+- professional
+- beginner
+- quantitative
+- banking
+title: 151 Quantitative Trading Machine Learning
+xp_reward: 50
+---
+
 # Lesson 187: Quantitative Trading and Machine Learning
 
 ## Learning Objectives

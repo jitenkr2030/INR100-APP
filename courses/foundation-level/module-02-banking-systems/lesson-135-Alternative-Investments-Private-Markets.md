@@ -1,3 +1,33 @@
+---
+content_level: foundation-level
+difficulty: Beginner
+duration: 15 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Understand alternative investments
+- Learn real estate investing
+lesson_id: MO-001
+lesson_number: '1'
+module: module-02-banking-systems
+prerequisites:
+- Basic financial literacy
+related_lessons:
+- MO-001.001
+tags:
+- services
+- crypto
+- safety
+- alternative investments
+- financial education
+- fundamentals
+- beginner
+- inr100
+- real estate
+- banking
+title: 135 Alternative Investments Private Markets
+xp_reward: 50
+---
+
 # Lesson 155: Alternative Investments and Private Markets
 
 ## Learning Objectives

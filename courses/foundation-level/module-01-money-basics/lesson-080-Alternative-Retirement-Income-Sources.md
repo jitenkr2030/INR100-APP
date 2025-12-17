@@ -1,3 +1,33 @@
+---
+content_level: foundation-level
+difficulty: Beginner
+duration: 15 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Understand alternative investments
+- Learn real estate investing
+lesson_id: MO-001
+lesson_number: '1'
+module: module-01-money-basics
+prerequisites:
+- Basic financial literacy
+related_lessons:
+- MO-001.001
+tags:
+- financial literacy
+- crypto
+- money
+- alternative investments
+- basics
+- fundamentals
+- financial education
+- beginner
+- inr100
+- real estate
+title: 080 Alternative Retirement Income Sources
+xp_reward: 50
+---
+
 # Lesson 10: Alternative Retirement Income Sources
 
 ## Course Overview

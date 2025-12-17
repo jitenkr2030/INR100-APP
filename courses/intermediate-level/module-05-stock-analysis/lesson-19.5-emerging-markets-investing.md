@@ -1,3 +1,33 @@
+---
+content_level: intermediate-level
+difficulty: Intermediate
+duration: 20 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Understand investment principles
+- Learn asset allocation
+lesson_id: MO-001
+lesson_number: '1'
+module: module-05-stock-analysis
+prerequisites:
+- Foundation Level completion
+- Basic investing knowledge
+related_lessons:
+- MO-001.001
+tags:
+- investment
+- investing
+- stocks
+- financial education
+- equity
+- inr100
+- wealth building
+- intermediate
+- analysis
+title: 19.5 Emerging Markets Investing
+xp_reward: 75
+---
+
 # Lesson 19.5: Emerging Markets Investing
 
 ## Learning Objectives

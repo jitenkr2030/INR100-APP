@@ -1,3 +1,33 @@
+---
+content_level: foundation-level
+difficulty: Beginner
+duration: 15 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Understand professional trading
+- Learn algorithmic strategies
+lesson_id: MO-001
+lesson_number: '1'
+module: module-01-money-basics
+prerequisites:
+- Basic financial literacy
+related_lessons:
+- MO-001.001
+tags:
+- financial literacy
+- money
+- basics
+- fundamentals
+- financial education
+- trading
+- inr100
+- professional
+- beginner
+- quantitative
+title: 018 Trading Account Basics
+xp_reward: 50
+---
+
 # Lesson 18: Trading Account Basics
 
 ## Course Overview

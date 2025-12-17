@@ -42,7 +42,7 @@ The INR100 Financial Education Platform offers a comprehensive, structured learn
 ## 🏗️ Foundation Level (Beginner)
 
 ### Module 1: Money Basics
-**Duration**: 2-3 hours | **Lessons**: 10 | **XP**: 2000
+**Duration**: 15-20 hours | **Lessons**: 90 | **XP**: 9000
 
 **Key Topics**:
 - What money is and how it works
@@ -59,7 +59,7 @@ The INR100 Financial Education Platform offers a comprehensive, structured learn
 **Certificate**: Money Basics Certification
 
 ### Module 2: Banking Systems
-**Duration**: 2-3 hours | **Lessons**: 8 | **XP**: 1600
+**Duration**: 13-16 hours | **Lessons**: 82 | **XP**: 8200
 
 **Key Topics**:
 - Banking products and services
@@ -74,7 +74,7 @@ The INR100 Financial Education Platform offers a comprehensive, structured learn
 **Certificate**: Banking & Safety Certification
 
 ### Module 3: Investing Introduction
-**Duration**: 3-4 hours | **Lessons**: 12 | **XP**: 2400
+**Duration**: 6-8 hours | **Lessons**: 39 | **XP**: 3900
 
 **Key Topics**:
 - Systematic Investment Plans (SIP)
@@ -93,7 +93,7 @@ The INR100 Financial Education Platform offers a comprehensive, structured learn
 ## 📈 Intermediate Level (Progressive)
 
 ### Module 4: Mutual Funds
-**Duration**: 4-5 hours | **Lessons**: 15 | **XP**: 3000
+**Duration**: 5-6 hours | **Lessons**: 30 | **XP**: 3000
 
 **Key Topics**:
 - Mutual fund types and structures
@@ -108,7 +108,7 @@ The INR100 Financial Education Platform offers a comprehensive, structured learn
 **Certificate**: Mutual Fund Specialist Certification
 
 ### Module 5: Stock Market Analysis
-**Duration**: 5-6 hours | **Lessons**: 18 | **XP**: 3600
+**Duration**: 5-6 hours | **Lessons**: 32 | **XP**: 3200
 
 **Key Topics**:
 - Technical analysis fundamentals
@@ -123,7 +123,7 @@ The INR100 Financial Education Platform offers a comprehensive, structured learn
 **Certificate**: Stock Analysis Professional Certification
 
 ### Module 6: Portfolio Building
-**Duration**: 4-5 hours | **Lessons**: 14 | **XP**: 2800
+**Duration**: 6-8 hours | **Lessons**: 39 | **XP**: 3900
 
 **Key Topics**:
 - Asset allocation strategies
@@ -142,7 +142,7 @@ The INR100 Financial Education Platform offers a comprehensive, structured learn
 ## 🚀 Advanced Level (Expert)
 
 ### Module 7: Derivatives
-**Duration**: 6-7 hours | **Lessons**: 20 | **XP**: 4000
+**Duration**: 4-5 hours | **Lessons**: 25 | **XP**: 2500
 
 **Key Topics**:
 - Options trading strategies
@@ -157,7 +157,7 @@ The INR100 Financial Education Platform offers a comprehensive, structured learn
 **Certificate**: Derivatives Trading Certification
 
 ### Module 8: Alternative Investments
-**Duration**: 5-6 hours | **Lessons**: 16 | **XP**: 3200
+**Duration**: 3-4 hours | **Lessons**: 20 | **XP**: 2000
 
 **Key Topics**:
 - ESG and sustainable investing
@@ -171,7 +171,7 @@ The INR100 Financial Education Platform offers a comprehensive, structured learn
 **Certificate**: Alternative Investments Certification
 
 ### Module 9: Professional Trading
-**Duration**: 8-10 hours | **Lessons**: 25 | **XP**: 5000
+**Duration**: 4-5 hours | **Lessons**: 25 | **XP**: 2500
 
 **Key Topics**:
 - Professional trading strategies
@@ -254,7 +254,7 @@ The INR100 Financial Education Platform offers a comprehensive, structured learn
 
 ### Complete Beginner Path
 1. **Foundation Level** → 2. **Intermediate Level** → 3. **Advanced Level**
-2. **Duration**: 12-15 months | **Total Investment**: 40-50 hours
+2. **Duration**: 12-15 months | **Total Investment**: 70-85 hours
 
 ### Professional Development Path
 1. **Assessment First** → 2. **Targeted Modules** → 3. **Specialization** → 4. **Certification**
@@ -349,5 +349,6 @@ Ready to transform your financial future? Choose your path:
 
 **Platform Version**: 3.0  
 **Last Updated**: December 17, 2025  
-**Total Learning Hours**: 40-80 hours depending on pathway  
+**Total Learning Hours**: 70-85 hours depending on pathway  
+**Total Lessons**: 382 comprehensive lessons  
 **Industry Recognition**: Professional Certification Standards

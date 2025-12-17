@@ -1,3 +1,33 @@
+---
+content_level: intermediate-level
+difficulty: Intermediate
+duration: 20 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Understand mutual fund fundamentals
+- Learn NAV calculation methods
+lesson_id: MO-001
+lesson_number: '1'
+module: module-05-stock-analysis
+prerequisites:
+- Foundation Level completion
+- Basic investing knowledge
+related_lessons:
+- MO-001.001
+tags:
+- mutual funds
+- stocks
+- financial education
+- equity
+- inr100
+- funds
+- investing
+- intermediate
+- analysis
+title: 19.3 International Mutual Funds Etfs
+xp_reward: 75
+---
+
 # Lesson 19.3: International Mutual Funds and ETFs
 
 ## Learning Objectives

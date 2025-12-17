@@ -1,3 +1,33 @@
+---
+content_level: foundation-level
+difficulty: Beginner
+duration: 15 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Understand investment principles
+- Learn asset allocation
+lesson_id: MO-001
+lesson_number: '1'
+module: module-02-banking-systems
+prerequisites:
+- Basic financial literacy
+related_lessons:
+- MO-001.001
+tags:
+- services
+- investment
+- safety
+- investing
+- financial education
+- fundamentals
+- inr100
+- wealth building
+- beginner
+- banking
+title: 143 International Investing Currency Risk
+xp_reward: 50
+---
+
 # Lesson 165: International Investing and Currency Risk Management
 
 ## Learning Objectives

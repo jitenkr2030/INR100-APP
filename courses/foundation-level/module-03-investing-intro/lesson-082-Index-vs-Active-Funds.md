@@ -1,3 +1,31 @@
+---
+content_level: foundation-level
+difficulty: Beginner
+duration: 15 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Understand basic concepts
+- Learn fundamental principles
+- Apply practical examples
+lesson_id: MO-001
+lesson_number: '1'
+module: module-03-investing-intro
+prerequisites:
+- Basic financial literacy
+related_lessons:
+- MO-001.001
+tags:
+- introduction
+- financial education
+- fundamentals
+- inr100
+- investing
+- beginner
+- sip
+title: 082 Index Vs Active Funds
+xp_reward: 50
+---
+
 # Lesson 2: Index Funds vs. Active Funds
 
 ## Learning Objectives

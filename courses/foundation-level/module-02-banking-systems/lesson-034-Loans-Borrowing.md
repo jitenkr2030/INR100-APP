@@ -1,3 +1,31 @@
+---
+content_level: foundation-level
+difficulty: Beginner
+duration: 15 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Understand basic concepts
+- Learn fundamental principles
+- Apply practical examples
+lesson_id: MO-001
+lesson_number: '1'
+module: module-02-banking-systems
+prerequisites:
+- Basic financial literacy
+related_lessons:
+- MO-001.001
+tags:
+- services
+- safety
+- financial education
+- fundamentals
+- inr100
+- beginner
+- banking
+title: 034 Loans Borrowing
+xp_reward: 50
+---
+
 # Lesson 4: Loans and Borrowing
 
 ## Learning Objectives

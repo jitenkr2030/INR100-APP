@@ -62,6 +62,9 @@ import {
   Link
 } from "lucide-react";
 
+// Import Course Dashboard components
+import { CourseProvider, LearnPageCourseDashboard } from "./components/CourseDashboard";
+
 interface Lesson {
   id: string;
   title: string;
@@ -749,17 +752,18 @@ export default function LearnPage() {
   }
 
   return (
-    <DashboardLayout user={{
-      name: "Rahul Sharma",
-      email: "rahul.sharma@email.com",
-      avatar: "/placeholder-avatar.jpg",
-      level: 5,
-      xp: 2500,
-      nextLevelXp: 3000,
-      walletBalance: 15000,
-      notifications: 3
-    }}>
-      <div className="space-y-6">
+    <CourseProvider>
+      <DashboardLayout user={{
+        name: "Rahul Sharma",
+        email: "rahul.sharma@email.com",
+        avatar: "/placeholder-avatar.jpg",
+        level: 5,
+        xp: 2500,
+        nextLevelXp: 3000,
+        walletBalance: 15000,
+        notifications: 3
+      }}>
+        <div className="space-y-6">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between">
           <div>
@@ -828,10 +832,11 @@ export default function LearnPage() {
 
         {/* Main Content */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="categories">Course Categories</TabsTrigger>
             <TabsTrigger value="paths">Learning Paths</TabsTrigger>
             <TabsTrigger value="achievements">Achievements</TabsTrigger>
+            <TabsTrigger value="dashboard">Learning Dashboard</TabsTrigger>
           </TabsList>
 
           <TabsContent value="categories" className="space-y-6">
@@ -1033,9 +1038,14 @@ export default function LearnPage() {
               ))}
             </div>
           </TabsContent>
+
+          <TabsContent value="dashboard" className="space-y-6">
+            <LearnPageCourseDashboard />
+          </TabsContent>
         </Tabs>
 
-      </div>
-    </DashboardLayout>
+        </div>
+      </DashboardLayout>
+    </CourseProvider>
   );
 }

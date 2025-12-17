@@ -1,3 +1,31 @@
+---
+content_level: intermediate-level
+difficulty: Intermediate
+duration: 20 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Analyze complex concepts
+- Apply advanced techniques
+- Solve real-world problems
+lesson_id: MO-001
+lesson_number: '1'
+module: module-06-portfolio-building
+prerequisites:
+- Foundation Level completion
+- Basic investing knowledge
+related_lessons:
+- MO-001.001
+tags:
+- financial education
+- portfolio
+- inr100
+- intermediate
+- analysis
+- asset allocation
+title: 108 Fund Manager Due Diligence
+xp_reward: 75
+---
+
 # Lesson 08: Fund Manager Due Diligence
 
 ## Learning Objectives

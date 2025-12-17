@@ -1,3 +1,33 @@
+---
+content_level: foundation-level
+difficulty: Beginner
+duration: 15 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Understand stock market mechanics
+- Learn technical and fundamental analysis
+lesson_id: MO-001
+lesson_number: '1'
+module: module-01-money-basics
+prerequisites:
+- Basic financial literacy
+related_lessons:
+- MO-001.001
+tags:
+- financial literacy
+- market analysis
+- money
+- basics
+- fundamentals
+- financial education
+- equity
+- inr100
+- stocks
+- beginner
+title: 014 Stock Market Overview India
+xp_reward: 50
+---
+
 # Lesson 14: Stock Market Overview India
 
 ## Course Overview

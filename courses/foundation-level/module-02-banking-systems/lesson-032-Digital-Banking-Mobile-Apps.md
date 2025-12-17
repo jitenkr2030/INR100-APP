@@ -1,3 +1,31 @@
+---
+content_level: foundation-level
+difficulty: Beginner
+duration: 15 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Understand banking systems
+- Learn about banking products
+lesson_id: MO-001
+lesson_number: '1'
+module: module-02-banking-systems
+prerequisites:
+- Basic financial literacy
+related_lessons:
+- MO-001.001
+tags:
+- services
+- safety
+- financial services
+- financial education
+- fundamentals
+- inr100
+- beginner
+- banking
+title: 032 Digital Banking Mobile Apps
+xp_reward: 50
+---
+
 # Lesson 2: Digital Banking & Mobile Apps
 
 ## Learning Objectives

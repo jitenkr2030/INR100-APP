@@ -1,0 +1,26 @@
+{
+  "module": "module-04-mutual-funds",
+  "media_type": "images",
+  "content_items": [
+    {
+      "filename": "lesson-01-financial-literacy-infographic.png",
+      "title": "Financial Literacy Infographic",
+      "type": "infographic",
+      "description": "Visual summary of key financial concepts"
+    },
+    {
+      "filename": "lesson-02-mutual-fund-structure-diagram.png",
+      "title": "Mutual Fund Structure Diagram",
+      "type": "diagram",
+      "description": "Technical illustration of fund structure"
+    },
+    {
+      "filename": "lesson-03-portfolio-allocation-chart.png",
+      "title": "Portfolio Allocation Chart",
+      "type": "chart",
+      "description": "Visual representation of asset allocation"
+    }
+  ],
+  "total_items": 3,
+  "last_updated": "2025-12-17T17:41:18.144479"
+}

@@ -1,3 +1,33 @@
+---
+content_level: foundation-level
+difficulty: Beginner
+duration: 15 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Understand mutual fund fundamentals
+- Learn NAV calculation methods
+lesson_id: MO-001
+lesson_number: '1'
+module: module-01-money-basics
+prerequisites:
+- Basic financial literacy
+related_lessons:
+- MO-001.001
+tags:
+- mutual funds
+- financial literacy
+- money
+- basics
+- fundamentals
+- financial education
+- inr100
+- funds
+- investing
+- beginner
+title: 50 Mutual Fund Taxation And Tax Planning
+xp_reward: 50
+---
+
 # Lesson 50: Mutual Fund Taxation and Tax Planning
 
 ## Learning Objectives

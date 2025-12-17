@@ -1,3 +1,33 @@
+---
+content_level: foundation-level
+difficulty: Beginner
+duration: 15 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Understand investment principles
+- Learn asset allocation
+lesson_id: MO-001
+lesson_number: '1'
+module: module-01-money-basics
+prerequisites:
+- Basic financial literacy
+related_lessons:
+- MO-001.001
+tags:
+- financial literacy
+- money
+- investment
+- investing
+- basics
+- fundamentals
+- financial education
+- inr100
+- wealth building
+- beginner
+title: 052 Cognitive Biases Investing
+xp_reward: 50
+---
+
 # Lesson 2: Cognitive Biases in Investing
 
 ## Learning Objectives

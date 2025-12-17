@@ -1,3 +1,33 @@
+---
+content_level: intermediate-level
+difficulty: Intermediate
+duration: 20 minutes
+last_updated: '2025-12-17'
+learning_objectives:
+- Understand portfolio theory
+- Learn asset allocation
+lesson_id: MO-001
+lesson_number: '1'
+module: module-05-stock-analysis
+prerequisites:
+- Foundation Level completion
+- Basic investing knowledge
+related_lessons:
+- MO-001.001
+tags:
+- diversification
+- stocks
+- financial education
+- portfolio
+- equity
+- inr100
+- intermediate
+- analysis
+- asset allocation
+title: 131 Modern Portfolio Theory Foundations
+xp_reward: 75
+---
+
 # Lesson 1: Modern Portfolio Theory Foundations
 
 ## Learning Objectives
