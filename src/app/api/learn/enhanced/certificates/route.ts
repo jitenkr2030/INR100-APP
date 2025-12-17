@@ -162,8 +162,54 @@ export async function GET(request: NextRequest) {
     const userId = searchParams.get('userId') || 'demo-user-id';
     const type = searchParams.get('type');
     const moduleId = searchParams.get('moduleId');
+    const certificateId = searchParams.get('certificateId');
+    const action = searchParams.get('action');
     
-    // Get user's certificates
+    // Handle individual certificate operations
+    if (certificateId) {
+      const certificate = mockCertificates.find(cert => cert.id === certificateId);
+      
+      if (!certificate) {
+        return NextResponse.json(
+          { success: false, error: 'Certificate not found' },
+          { status: 404 }
+        );
+      }
+      
+      if (action === 'download') {
+        // Generate PDF certificate (mock implementation)
+        const pdfBuffer = await generateCertificatePDF(certificate);
+        
+        return new NextResponse(pdfBuffer, {
+          headers: {
+            'Content-Type': 'application/pdf',
+            'Content-Disposition': `attachment; filename="${certificate.title.replace(/\s+/g, '_')}_Certificate.pdf"`
+          }
+        });
+      }
+      
+      if (action === 'verify') {
+        // Verify certificate authenticity
+        const verificationResult = await verifyCertificate(certificate);
+        
+        return NextResponse.json({
+          success: true,
+          data: verificationResult
+        });
+      }
+      
+      // Return certificate details
+      return NextResponse.json({
+        success: true,
+        data: {
+          certificate,
+          canDownload: true,
+          verificationCode: certificate.verificationCode
+        }
+      });
+    }
+    
+    // Get user's certificates for list view
     let userCertificates = mockCertificates.filter(cert => cert.userId === userId);
     
     // Filter by type if specified
@@ -273,61 +319,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function GET(request: NextRequest, { params }: { params: { certificateId: string } }) {
-  try {
-    const certificateId = params.certificateId;
-    const { searchParams } = new URL(request.url);
-    const action = searchParams.get('action');
-    
-    // Get certificate by ID
-    const certificate = mockCertificates.find(cert => cert.id === certificateId);
-    
-    if (!certificate) {
-      return NextResponse.json(
-        { success: false, error: 'Certificate not found' },
-        { status: 404 }
-      );
-    }
-    
-    if (action === 'download') {
-      // Generate PDF certificate (mock implementation)
-      const pdfBuffer = await generateCertificatePDF(certificate);
-      
-      return new NextResponse(pdfBuffer, {
-        headers: {
-          'Content-Type': 'application/pdf',
-          'Content-Disposition': `attachment; filename="${certificate.title.replace(/\s+/g, '_')}_Certificate.pdf"`
-        }
-      });
-    }
-    
-    if (action === 'verify') {
-      // Verify certificate authenticity
-      const verificationResult = await verifyCertificate(certificate);
-      
-      return NextResponse.json({
-        success: true,
-        data: verificationResult
-      });
-    }
-    
-    // Return certificate details
-    return NextResponse.json({
-      success: true,
-      data: {
-        certificate,
-        canDownload: true,
-        verificationCode: certificate.verificationCode
-      }
-    });
-  } catch (error) {
-    console.error('Certificate operation error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    );
-  }
-}
+
 
 // Helper functions
 

@@ -1637,7 +1637,7 @@ async function awardEnrollmentXp(userId: string, certification: Certification) {
   });
 }
 
-async function awardModuleXp(userId: string string, moduleId, certificationId:: number, score?: number) {
+async function awardModuleXp(userId: string, moduleId: number, certificationId: number, score?: number) {
   const baseXp = 50;
   const scoreBonus = score ? Math.floor(score / 10) : 0;
   const xp = baseXp + scoreBonus;

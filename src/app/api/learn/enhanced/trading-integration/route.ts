@@ -162,9 +162,11 @@ export async function POST(request: NextRequest) {
       case 'complete-application':
         return await completeTradingApplication(await request.json());
       case 'request-review':
-        return await requestExpertReview(await request.jsontrack-performance':
-        return await trackPerformance());
-      case 'Update(await request.json());
+        return await requestExpertReview(await request.json());
+      case 'track-performance':
+        return await trackPerformance(await request.json());
+      case 'update':
+        return await updateTradingPreferences(await request.json());
       default:
         return NextResponse.json(
           { success: false, error: 'Invalid action' },

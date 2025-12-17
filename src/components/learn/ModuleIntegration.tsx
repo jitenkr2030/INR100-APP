@@ -536,8 +536,8 @@ export default function ModuleIntegration({
       {/* Module Header */}
       <Card className={`border ${getModuleColorClass(moduleContent.color)}`}>
         <CardHeader>
-          <div className="flex items-center justify-between className="flex">
-            <div-1">
+          <div className="flex items-center justify-between">
+            <div>
               <div className="flex items-center space-x-3 mb-2">
                 <CardTitle className="text-2xl">{moduleContent.title}</CardTitle>
                 <Badge className={getDifficultyColor(moduleContent.difficulty)}>
