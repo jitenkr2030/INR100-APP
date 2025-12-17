@@ -192,6 +192,12 @@ function InteractiveElement({ element }: { element: any }) {
         return <SimulationComponent {...element} />;
       case 'exercise':
         return <ExerciseComponent {...element} />;
+      case 'case-study':
+        return <CaseStudyElement 
+          caseStudyId={element.caseStudyId || 'default-case'} 
+          title={element.title} 
+          description={element.description} 
+        />;
       default:
         return (
           <div className="p-4 border border-gray-200 rounded-lg">
@@ -233,6 +239,7 @@ function InteractiveElement({ element }: { element: any }) {
 import SIPCalculator from "./calculators/SIPCalculator";
 import CompoundInterestCalculator from "./calculators/CompoundInterestCalculator";
 import RetirementCalculator from "./calculators/RetirementCalculator";
+import CaseStudyComponent from "./CaseStudyComponent";
 
 function CalculatorComponent(props: any) {
   const { type, title, description, ...calculatorProps } = props;
@@ -325,6 +332,23 @@ function ExerciseComponent(props: any) {
           Practice exercise would be implemented here.
         </p>
       </div>
+    </div>
+  );
+}
+
+// Case Study Component
+function CaseStudyElement({ caseStudyId, title, description }: { 
+  caseStudyId: string; 
+  title: string; 
+  description: string; 
+}) {
+  return (
+    <div className="my-6">
+      <CaseStudyComponent
+        caseStudyId={caseStudyId}
+        title={title}
+        description={description}
+      />
     </div>
   );
 }
