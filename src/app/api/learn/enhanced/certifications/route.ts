@@ -1526,25 +1526,6 @@ function generateProgressRecommendations(userCert: UserCertification, certificat
   return recommendations;
 }
 
-function generatePreparationResources(certification: Certification) {
-  return {
-    studyPlan: '8-week structured study plan',
-    resources: [
-      'Official certification guide',
-      'Video tutorials (50+ hours)',
-      'Practice question bank (1000+ questions)',
-      'Case study workbook',
-      'Mock examination series'
-    ],
-    support: [
-      '24/7 online doubt clearing',
-      'Expert mentor guidance',
-      'Peer study groups',
-      'Weekly progress reviews'
-    ]
-  };
-}
-
 function generateExamInstructions(certificationId: string) {
   return {
     technicalRequirements: [

@@ -155,8 +155,8 @@ export default function EnhancedLearningDashboard() {
           category.modules.map((course: any) => ({
             ...course,
             moduleNumber: getModuleNumber(course.id),
-            hasAssessments: shouldHave),
-            hasExercises: shouldHaveExercises(course.idAssessments(course.id),
+            hasAssessments: shouldHaveAssessments(course.id),
+            hasExercises: shouldHaveExercises(course.id),
             hasCaseStudies: shouldHaveCaseStudies(course.id),
             hasCalculators: shouldHaveCalculators(course.id),
             interactiveLessons: calculateInteractiveLessons(course),

@@ -334,7 +334,7 @@ class LearningAnalyticsEngine {
   
   private async updateRealTimeMetrics(userId: string): Promise<void> {
     // Update real-time dashboard metrics
- could trigger Web    // ThisSocket updates or cache invalidation
+    // This could trigger WebSocket updates or cache invalidation
   }
 }
 

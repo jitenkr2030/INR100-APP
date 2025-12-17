@@ -698,8 +698,8 @@ export async function PUT(request: NextRequest) {
     console.error('Error updating live learning session:', error);
     return NextResponse.json(
       { 
-, 
-        error: 'Failed to update live learning session        success: false',
+        success: false,
+        error: 'Failed to update live learning session',
         details: error instanceof Error ? error.message : 'Unknown error'
       },
       { status: 500 }
