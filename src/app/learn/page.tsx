@@ -730,7 +730,7 @@ export default function LearnPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedLevel, setSelectedLevel] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState("categories");
+  const [activeTab, setActiveTab] = useState("dashboard"); // Changed default to dashboard for visibility
 
   const { courses, categories, userData, loading, error } = useCourseData(selectedCategory, selectedLevel);
 
@@ -780,7 +780,6 @@ export default function LearnPage() {
       const data = await response.json();
       
       if (response.ok) {
-        // This would typically update the course state through a context or state management
         console.log(`Successfully enrolled in course! You earned ${data.xpEarned || 25} XP!`);
       } else {
         alert(data.error || "Failed to enroll in course");
@@ -815,6 +814,7 @@ export default function LearnPage() {
 
   const handleCategorySelect = useCallback((categoryId: string) => {
     setSelectedCategory(categoryId);
+    setActiveTab("categories"); // Switch to categories tab when selecting
   }, []);
 
   // Loading state
@@ -922,11 +922,15 @@ export default function LearnPage() {
           {/* Main Content */}
           <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
             <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="dashboard">Learning Dashboard</TabsTrigger>
               <TabsTrigger value="categories">Course Categories</TabsTrigger>
               <TabsTrigger value="paths">Learning Paths</TabsTrigger>
               <TabsTrigger value="achievements">Achievements</TabsTrigger>
-              <TabsTrigger value="dashboard">Learning Dashboard</TabsTrigger>
             </TabsList>
+
+            <TabsContent value="dashboard" className="space-y-6">
+              <LearnPageCourseDashboard />
+            </TabsContent>
 
             <TabsContent value="categories" className="space-y-6">
               {/* Search and Filters */}
@@ -1041,10 +1045,6 @@ export default function LearnPage() {
                   <AchievementCard key={achievement.id} achievement={achievement} />
                 ))}
               </div>
-            </TabsContent>
-
-            <TabsContent value="dashboard" className="space-y-6">
-              <LearnPageCourseDashboard />
             </TabsContent>
           </Tabs>
         </div>
