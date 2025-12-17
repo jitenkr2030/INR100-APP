@@ -1,10 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { PrismaClient } from '@prisma/client';
 
+// Initialize Prisma client
+const prisma = new PrismaClient();
+
+// Enhanced Progress API with Real Database Integration
 interface EnhancedProgressData {
   userId: string;
   courseId: string;
   lessonId?: string;
-  moduleId?: number;
+  moduleId?: string;
   action: 'start_lesson' | 'complete_lesson' | 'start_assessment' | 'complete_assessment' | 'complete_exercise' | 'complete_case_study' | 'use_interactive_feature';
   timeSpent?: number;
   interactiveFeatures?: {
@@ -18,8 +23,8 @@ interface EnhancedProgressData {
   data?: any;
 }
 
-// Enhanced XP calculation function
-function calculateEnhancedXP(action: string, features: any[] = [], score?: number): number {
+// Enhanced XP calculation function with database integration
+async function calculateEnhancedXP(action: string, features: any[] = [], score?: number): Promise<number> {
   let baseXP = 0;
   
   switch (action) {
@@ -56,8 +61,32 @@ function calculateEnhancedXP(action: string, features: any[] = [], score?: numbe
   return baseXP + featureBonus + performanceBonus;
 }
 
-// Mock database - in production, this would be actual database operations
-const mockProgressData = new Map();
+// Get or create learning session
+async function getOrCreateLearningSession(userId: string, lessonId: string, moduleId: string, categoryId: string) {
+  const existingSession = await prisma.learningSession.findFirst({
+    where: {
+      userId,
+      lessonId,
+      isCompleted: false
+    }
+  });
+  
+  if (existingSession) {
+    return existingSession;
+  }
+  
+  return await prisma.learningSession.create({
+    data: {
+      userId,
+      lessonId,
+      moduleId,
+      categoryId,
+      sessionStart: new Date(),
+      isCompleted: false,
+      xpEarned: 0
+    }
+  });
+}
 
 export async function POST(request: NextRequest) {
   try {
@@ -72,6 +101,18 @@ export async function POST(request: NextRequest) {
       );
     }
     
+    // Verify user exists
+    const user = await prisma.user.findUnique({
+      where: { id: userId }
+    });
+    
+    if (!user) {
+      return NextResponse.json(
+        { success: false, error: 'User not found' },
+        { status: 404 }
+      );
+    }
+    
     // Calculate enhanced XP
     const features = [];
     if (interactiveFeatures?.calculatorUsed) features.push('calculator');
@@ -79,45 +120,121 @@ export async function POST(request: NextRequest) {
     if (interactiveFeatures?.assessmentTaken) features.push('assessment');
     if (interactiveFeatures?.exerciseCompleted) features.push('exercise');
     
-    const xpEarned = calculateEnhancedXP(action, features, score);
+    const xpEarned = await calculateEnhancedXP(action, features, score);
     
-    // Create progress record
-    const progressRecord = {
-      id: `${userId}_${courseId}_${lessonId || 'module'}_${Date.now()}`,
-      userId,
-      courseId,
-      lessonId,
-      moduleId: progressData.moduleId,
-      action,
-      timeSpent: timeSpent || 0,
-      interactiveFeatures: interactiveFeatures || {},
-      score,
-      percentage,
-      xpEarned,
-      completedAt: new Date().toISOString(),
-      timestamp: Date.now()
-    };
+    // Create or update learning session
+    let session = null;
+    if (lessonId) {
+      session = await getOrCreateLearningSession(userId, lessonId, progressData.moduleId || 'unknown', courseId);
+    }
     
-    // Store in mock database (replace with actual database)
-    const userProgressKey = `${userId}_${courseId}`;
-    const existingProgress = mockProgressData.get(userProgressKey) || [];
-    existingProgress.push(progressRecord);
-    mockProgressData.set(userProgressKey, existingProgress);
+    // Create XP gain record
+    await prisma.xpGain.create({
+      data: {
+        userId,
+        source: action.includes('assessment') ? 'quiz' : action.includes('lesson') ? 'lesson' : 'course',
+        sourceId: lessonId || courseId,
+        amount: xpEarned,
+        reason: `${action.replace('_', ' ')} - ${courseId}`
+      }
+    });
+    
+    // Update user XP and level
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        xp: {
+          increment: xpEarned
+        },
+        level: {
+          set: Math.floor((user.xp + xpEarned) / 500) + 1 // Level up every 500 XP
+        }
+      }
+    });
+    
+    // Update learning session if exists
+    if (session) {
+      const sessionUpdateData: any = {
+        timeSpent: {
+          increment: timeSpent || 0
+        }
+      };
+      
+      if (action === 'complete_lesson' || action === 'complete_assessment') {
+        sessionUpdateData.isCompleted = true;
+        sessionUpdateData.sessionEnd = new Date();
+        sessionUpdateData.xpEarned = {
+          increment: xpEarned
+        };
+      }
+      
+      await prisma.learningSession.update({
+        where: { id: session.id },
+        data: sessionUpdateData
+      });
+    }
+    
+    // Update daily learning stats
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    await prisma.dailyLearning.upsert({
+      where: {
+        userId_date: {
+          userId,
+          date: today
+        }
+      },
+      update: {
+        timeSpent: {
+          increment: timeSpent || 0
+        },
+        xpEarned: {
+          increment: xpEarned
+        },
+        lessonsCompleted: action === 'complete_lesson' ? {
+          increment: 1
+        } : undefined,
+        quizzesCompleted: action === 'complete_assessment' ? {
+          increment: 1
+        } : undefined
+      },
+      create: {
+        userId,
+        date: today,
+        timeSpent: timeSpent || 0,
+        xpEarned: xpEarned,
+        lessonsCompleted: action === 'complete_lesson' ? 1 : 0,
+        quizzesCompleted: action === 'complete_assessment' ? 1 : 0,
+        coursesCompleted: 0
+      }
+    });
+    
+    // Update learning streak
+    await updateLearningStreak(userId);
+    
+    // Check for achievements
+    const newAchievements = await checkAndAwardAchievements(userId, action, score, percentage);
     
     // Generate certificate for module completion
     const certificateGenerated = action === 'complete_assessment' && percentage >= 70;
+    let certificate = null;
+    
+    if (certificateGenerated) {
+      certificate = await generateCertificate(userId, courseId, progressData.moduleId, percentage);
+    }
     
     // Response data
     const responseData = {
       success: true,
       data: {
-        progressId: progressRecord.id,
         xpEarned,
         certificateGenerated,
-        levelUp: false, // Calculate based on user's total XP
-        achievements: generateAchievements(progressData, xpEarned),
-        nextMilestone: getNextMilestone(userId, courseId, xpEarned),
-        progress: calculateProgress(userId, courseId)
+        levelUp: updatedUser.level > user.level,
+        newLevel: updatedUser.level,
+        achievements: newAchievements,
+        nextMilestone: getNextMilestone(updatedUser.xp),
+        progress: await calculateUserProgress(userId, courseId)
       }
     };
     
@@ -145,34 +262,42 @@ export async function GET(request: NextRequest) {
       );
     }
     
-    // Get progress data from mock database
-    const userProgressKey = `${userId}_${courseId}`;
-    const progressData = mockProgressData.get(userProgressKey) || [];
-    
-    // Filter by module if specified
-    const filteredData = moduleId 
-      ? progressData.filter((record: any) => record.moduleId === parseInt(moduleId))
-      : progressData;
+    // Get user's learning sessions
+    const sessions = await prisma.learningSession.findMany({
+      where: {
+        userId,
+        ...(courseId && { categoryId: courseId }),
+        ...(moduleId && { moduleId })
+      },
+      orderBy: { createdAt: 'desc' },
+      take: 50
+    });
     
     // Calculate summary statistics
-    const summary = {
-      totalXpEarned: filteredData.reduce((sum: number, record: any) => sum + record.xpEarned, 0),
-      totalTimeSpent: filteredData.reduce((sum: number, record: any) => sum + record.timeSpent, 0),
-      assessmentsCompleted: filteredData.filter((r: any) => r.action === 'complete_assessment').length,
-      exercisesCompleted: filteredData.filter((r: any) => r.action === 'complete_exercise').length,
-      caseStudiesCompleted: filteredData.filter((r: any) => r.action === 'complete_case_study').length,
-      lessonsCompleted: filteredData.filter((r: any) => r.action === 'complete_lesson').length,
-      averageScore: filteredData.filter((r: any) => r.score !== undefined).reduce((sum: number, record: any, _, arr) => {
-        return sum + record.score / arr.length;
-      }, 0),
-      lastActivity: filteredData.length > 0 ? Math.max(...filteredData.map((r: any) => r.timestamp)) : null
-    };
+    const summary = await prisma.xpGain.aggregate({
+      where: { userId },
+      _sum: { amount: true }
+    });
+    
+    const totalTimeSpent = sessions.reduce((sum, session) => sum + (session.timeSpent || 0), 0);
+    const assessmentsCompleted = sessions.filter(s => s.sessionEnd && s.xpEarned > 0).length;
+    const exercisesCompleted = sessions.filter(s => s.sessionEnd).length;
+    const lessonsCompleted = sessions.filter(s => s.isCompleted).length;
+    
+    const lastActivity = sessions.length > 0 ? sessions[0].createdAt : null;
     
     return NextResponse.json({
       success: true,
       data: {
-        progress: filteredData,
-        summary,
+        progress: sessions,
+        summary: {
+          totalXpEarned: summary._sum.amount || 0,
+          totalTimeSpent,
+          assessmentsCompleted,
+          exercisesCompleted,
+          lessonsCompleted,
+          lastActivity
+        },
         userId,
         courseId,
         moduleId: moduleId ? parseInt(moduleId) : null
@@ -188,29 +313,207 @@ export async function GET(request: NextRequest) {
 }
 
 // Helper functions
-function generateAchievements(progressData: EnhancedProgressData, xpEarned: number): string[] {
-  const achievements = [];
+
+async function updateLearningStreak(userId: string) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
   
-  if (xpEarned >= 200) {
-    achievements.push('High Performer');
+  const existingStreak = await prisma.learningStreak.findUnique({
+    where: { userId }
+  });
+  
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
+  
+  if (!existingStreak) {
+    // Create new streak
+    await prisma.learningStreak.create({
+      data: {
+        userId,
+        currentStreak: 1,
+        longestStreak: 1,
+        lastActiveDate: today
+      }
+    });
+  } else {
+    const lastActive = existingStreak.lastActiveDate ? new Date(existingStreak.lastActiveDate) : null;
+    
+    if (lastActive && lastActive.getTime() === today.getTime()) {
+      // Already active today, no change
+      return;
+    } else if (lastActive && lastActive.getTime() === yesterday.getTime()) {
+      // Consecutive day, increment streak
+      await prisma.learningStreak.update({
+        where: { userId },
+        data: {
+          currentStreak: existingStreak.currentStreak + 1,
+          longestStreak: Math.max(existingStreak.longestStreak, existingStreak.currentStreak + 1),
+          lastActiveDate: today
+        }
+      });
+    } else {
+      // Streak broken, reset to 1
+      await prisma.learningStreak.update({
+        where: { userId },
+        data: {
+          currentStreak: 1,
+          longestStreak: existingStreak.longestStreak,
+          lastActiveDate: today,
+          streakBrokenAt: lastActive || undefined
+        }
+      });
+    }
   }
-  
-  if (progressData.interactiveFeatures?.calculatorUsed) {
-    achievements.push('Calculator Master');
-  }
-  
-  if (progressData.interactiveFeatures?.caseStudyCompleted) {
-    achievements.push('Case Study Expert');
-  }
-  
-  if (progressData.score && progressData.score >= 90) {
-    achievements.push('Perfect Score');
-  }
-  
-  return achievements;
 }
 
-function getNextMilestone(userId: string, courseId: string, currentXp: number): string {
+async function checkAndAwardAchievements(userId: string, action: string, score?: number, percentage?: number): Promise<string[]> {
+  const newAchievements: string[] = [];
+  
+  // Check for streak achievements
+  const streak = await prisma.learningStreak.findUnique({ where: { userId } });
+  if (streak) {
+    if (streak.currentStreak === 7) {
+      await awardAchievement(userId, 'week_warrior');
+      newAchievements.push('Week Warrior');
+    }
+    if (streak.currentStreak === 30) {
+      await awardAchievement(userId, 'month_master');
+      newAchievements.push('Month Master');
+    }
+  }
+  
+  // Check for performance achievements
+  if (score && score >= 100) {
+    await awardAchievement(userId, 'perfect_score');
+    newAchievements.push('Perfect Score');
+  }
+  
+  // Check for interactive feature usage
+  await awardAchievement(userId, 'first_lesson');
+  
+  return newAchievements;
+}
+
+async function awardAchievement(userId: string, achievementId: string) {
+  // First check if achievement exists
+  const achievement = await prisma.achievement.findUnique({
+    where: { name: achievementId }
+  });
+  
+  if (!achievement) {
+    // Create the achievement if it doesn't exist
+    await prisma.achievement.create({
+      data: {
+        name: achievementId,
+        description: getAchievementDescription(achievementId),
+        category: getAchievementCategory(achievementId),
+        xpReward: getAchievementXPReward(achievementId),
+        criteria: '{}',
+        isActive: true
+      }
+    });
+  }
+  
+  // Check if user already has this achievement
+  const existingUserAchievement = await prisma.userAchievement.findUnique({
+    where: {
+      userId_achievementId: {
+        userId,
+        achievementId: achievementId
+      }
+    }
+  });
+  
+  if (!existingUserAchievement) {
+    // Award the achievement
+    await prisma.userAchievement.create({
+      data: {
+        userId,
+        achievementId,
+        progress: 100,
+        isNotified: true
+      }
+    });
+    
+    // Award XP for the achievement
+    const achievement = await prisma.achievement.findUnique({
+      where: { name: achievementId }
+    });
+    
+    if (achievement && achievement.xpReward > 0) {
+      await prisma.xpGain.create({
+        data: {
+          userId,
+          source: 'achievement',
+          sourceId: achievementId,
+          amount: achievement.xpReward,
+          reason: `Achievement: ${achievement.name}`
+        }
+      });
+      
+      // Update user's total XP
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          xp: {
+            increment: achievement.xpReward
+          }
+        }
+      });
+    }
+  }
+}
+
+function getAchievementDescription(achievementId: string): string {
+  const descriptions = {
+    'first_lesson': 'Complete your first lesson',
+    'week_warrior': 'Maintain a 7-day learning streak',
+    'month_master': 'Maintain a 30-day learning streak',
+    'perfect_score': 'Score 100% on any assessment'
+  };
+  return descriptions[achievementId] || 'Achievement unlocked';
+}
+
+function getAchievementCategory(achievementId: string): string {
+  if (achievementId.includes('lesson')) return 'learning';
+  if (achievementId.includes('streak')) return 'streak';
+  if (achievementId.includes('score')) return 'assessment';
+  return 'general';
+}
+
+function getAchievementXPReward(achievementId: string): number {
+  const rewards = {
+    'first_lesson': 50,
+    'week_warrior': 250,
+    'month_master': 1000,
+    'perfect_score': 300
+  };
+  return rewards[achievementId] || 100;
+}
+
+async function generateCertificate(userId: string, courseId: string, moduleId?: string, score?: number) {
+  const certificateNumber = `CERT-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  
+  return await prisma.certificate.create({
+    data: {
+      userId,
+      courseId,
+      categoryId: courseId,
+      moduleId: moduleId || 'unknown',
+      certificateNumber,
+      completionPercentage: 100,
+      finalScore: score || 100,
+      totalTimeSpent: 0,
+      metadata: JSON.stringify({
+        generatedAt: new Date().toISOString(),
+        score,
+        courseId
+      })
+    }
+  });
+}
+
+function getNextMilestone(currentXp: number): string {
   const milestones = [
     { xp: 500, title: 'Learning Enthusiast' },
     { xp: 1000, title: 'Knowledge Seeker' },
@@ -222,18 +525,17 @@ function getNextMilestone(userId: string, courseId: string, currentXp: number): 
   return nextMilestone ? `${nextMilestone.xp - currentXp} XP to ${nextMilestone.title}` : 'Max level reached!';
 }
 
-function calculateProgress(userId: string, courseId: string): number {
+async function calculateUserProgress(userId: string, courseId: string): Promise<number> {
   // Mock progress calculation - in real app, this would check against course structure
-  const userProgressKey = `${userId}_${courseId}`;
-  const progressData = mockProgressData.get(userProgressKey) || [];
-  
-  const completedItems = progressData.filter((r: any) => 
-    r.action === 'complete_lesson' || 
-    r.action === 'complete_assessment' || 
-    r.action === 'complete_exercise'
-  ).length;
+  const sessions = await prisma.learningSession.count({
+    where: {
+      userId,
+      categoryId: courseId,
+      isCompleted: true
+    }
+  });
   
   // Assume 20 total items for mock calculation
   const totalItems = 20;
-  return Math.min(100, (completedItems / totalItems) * 100);
+  return Math.min(100, (sessions / totalItems) * 100);
 }
