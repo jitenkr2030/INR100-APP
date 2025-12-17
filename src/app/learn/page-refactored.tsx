@@ -982,7 +982,7 @@ export default function LearnPage() {
                         onSelect={handleCategorySelect}
                       />
                     ))}
-                      </div>
+                  </div>
                 </div>
               ) : (
                 <div className="space-y-6">
