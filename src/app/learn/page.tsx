@@ -49,7 +49,10 @@ import {
   Video,
   File,
   Image,
-  Link
+  Link,
+  Activity,
+  TrendingDown as TrendingDownIcon,
+  ArrowRight
 } from "lucide-react";
 
 // Import Course Dashboard components
@@ -118,6 +121,7 @@ interface LearningPath {
   totalXp: number;
   icon: any;
   color: string;
+  courses: Course[];
 }
 
 interface Achievement {
@@ -160,7 +164,82 @@ const LEARNING_PATHS: LearningPath[] = [
     level: "beginner",
     totalXp: 575,
     icon: Star,
-    color: "bg-green-100 text-green-600"
+    color: "bg-green-100 text-green-600",
+    courses: [
+      {
+        id: "stock-foundations-001",
+        title: "Stock Market Foundations",
+        description: "Beginner friendly introduction to stock market basics",
+        category: "stock-market",
+        module: "stock-foundations",
+        level: "beginner",
+        duration: "2-3 hours",
+        lessons: 10,
+        topics: ["How the stock market works", "Primary vs secondary market", "IPO basics", "Market indices", "Trading hours"],
+        isEnrolled: true,
+        progress: 60,
+        xpReward: 150,
+        importance: "high",
+        icon: TrendingUp,
+        color: "bg-blue-100 text-blue-600",
+        filePath: "/courses/stock-market-foundations/"
+      },
+      {
+        id: "sip-wealth-001",
+        title: "SIP & Wealth Building",
+        description: "Master systematic investment and wealth creation",
+        category: "wealth-building",
+        module: "sip-wealth-building",
+        level: "beginner",
+        duration: "2-3 hours",
+        lessons: 9,
+        topics: ["SIP vs lump-sum", "Power of compounding", "SIP calculations", "Financial goals", "Asset allocation"],
+        isEnrolled: true,
+        progress: 30,
+        xpReward: 175,
+        importance: "high",
+        icon: PiggyBank,
+        color: "bg-purple-100 text-purple-600",
+        filePath: "/courses/sip-wealth-building/"
+      },
+      {
+        id: "risk-management-001",
+        title: "Risk Management & Safety",
+        description: "Learn to protect your investments",
+        category: "risk-management",
+        module: "risk-management-safety",
+        level: "beginner",
+        duration: "2-3 hours",
+        lessons: 7,
+        topics: ["Understanding volatility", "Risk measurement", "Drawdowns", "Diversification", "Emergency funds"],
+        isEnrolled: true,
+        progress: 45,
+        xpReward: 150,
+        importance: "high",
+        icon: Shield,
+        color: "bg-red-100 text-red-600",
+        filePath: "/courses/risk-management-safety/"
+      },
+      {
+        id: "scam-awareness-001",
+        title: "Scam Awareness",
+        description: "Protect yourself from financial fraud",
+        category: "safety",
+        module: "scam-awareness",
+        level: "beginner",
+        duration: "1-2 hours",
+        lessons: 7,
+        topics: ["Stock market fraud", "Pump and dump schemes", "WhatsApp scams", "Broker verification", "Ponzi schemes"],
+        isEnrolled: true,
+        progress: 80,
+        xpReward: 100,
+        importance: "critical",
+        warning: "Critical security course - Must complete before investing",
+        icon: AlertTriangle,
+        color: "bg-yellow-100 text-yellow-800",
+        filePath: "/courses/scam-awareness/"
+      }
+    ]
   },
   {
     id: "safety-first",
@@ -171,7 +250,46 @@ const LEARNING_PATHS: LearningPath[] = [
     level: "beginner",
     totalXp: 400,
     icon: ShieldCheck,
-    color: "bg-blue-100 text-blue-600"
+    color: "bg-blue-100 text-blue-600",
+    courses: [
+      {
+        id: "scam-awareness-001",
+        title: "Scam Awareness",
+        description: "Protect yourself from financial fraud",
+        category: "safety",
+        module: "scam-awareness",
+        level: "beginner",
+        duration: "1-2 hours",
+        lessons: 7,
+        topics: ["Stock market fraud", "Pump and dump schemes", "WhatsApp scams", "Broker verification", "Ponzi schemes"],
+        isEnrolled: true,
+        progress: 80,
+        xpReward: 100,
+        importance: "critical",
+        warning: "Critical security course - Must complete before investing",
+        icon: AlertTriangle,
+        color: "bg-yellow-100 text-yellow-800",
+        filePath: "/courses/scam-awareness/"
+      },
+      {
+        id: "risk-management-001",
+        title: "Risk Management & Safety",
+        description: "Learn to protect your investments",
+        category: "risk-management",
+        module: "risk-management-safety",
+        level: "beginner",
+        duration: "2-3 hours",
+        lessons: 7,
+        topics: ["Understanding volatility", "Risk measurement", "Drawdowns", "Diversification", "Emergency funds"],
+        isEnrolled: true,
+        progress: 45,
+        xpReward: 150,
+        importance: "high",
+        icon: Shield,
+        color: "bg-red-100 text-red-600",
+        filePath: "/courses/risk-management-safety/"
+      }
+    ]
   },
   {
     id: "wealth-builder",
@@ -182,7 +300,45 @@ const LEARNING_PATHS: LearningPath[] = [
     level: "intermediate",
     totalXp: 500,
     icon: TrendingUp,
-    color: "bg-purple-100 text-purple-600"
+    color: "bg-purple-100 text-purple-600",
+    courses: [
+      {
+        id: "sip-wealth-001",
+        title: "SIP & Wealth Building",
+        description: "Master systematic investment and wealth creation",
+        category: "wealth-building",
+        module: "sip-wealth-building",
+        level: "beginner",
+        duration: "2-3 hours",
+        lessons: 9,
+        topics: ["SIP vs lump-sum", "Power of compounding", "SIP calculations", "Financial goals", "Asset allocation"],
+        isEnrolled: true,
+        progress: 30,
+        xpReward: 175,
+        importance: "high",
+        icon: PiggyBank,
+        color: "bg-purple-100 text-purple-600",
+        filePath: "/courses/sip-wealth-building/"
+      },
+      {
+        id: "mutual-funds-001",
+        title: "Mutual Funds Deep Dive",
+        description: "Comprehensive guide to mutual fund investing",
+        category: "mutual-funds",
+        module: "mutual-funds-deep-dive",
+        level: "intermediate",
+        duration: "3-4 hours",
+        lessons: 11,
+        topics: ["Types of mutual funds", "Index vs active funds", "How NAV works", "Expense ratio", "Fund management"],
+        isEnrolled: false,
+        progress: 0,
+        xpReward: 200,
+        importance: "high",
+        icon: PieChart,
+        color: "bg-green-100 text-green-600",
+        filePath: "/courses/mutual-funds-deep-dive/"
+      }
+    ]
   },
   {
     id: "advanced-investor",
@@ -193,7 +349,45 @@ const LEARNING_PATHS: LearningPath[] = [
     level: "advanced",
     totalXp: 725,
     icon: Award,
-    color: "bg-red-100 text-red-600"
+    color: "bg-red-100 text-red-600",
+    courses: [
+      {
+        id: "mutual-funds-001",
+        title: "Mutual Funds Deep Dive",
+        description: "Comprehensive guide to mutual fund investing",
+        category: "mutual-funds",
+        module: "mutual-funds-deep-dive",
+        level: "intermediate",
+        duration: "3-4 hours",
+        lessons: 11,
+        topics: ["Types of mutual funds", "Index vs active funds", "How NAV works", "Expense ratio", "Fund management"],
+        isEnrolled: false,
+        progress: 0,
+        xpReward: 200,
+        importance: "high",
+        icon: PieChart,
+        color: "bg-green-100 text-green-600",
+        filePath: "/courses/mutual-funds-deep-dive/"
+      },
+      {
+        id: "behavioral-finance-001",
+        title: "Behavioral Finance Psychology",
+        description: "Understanding the psychology of investing",
+        category: "psychology",
+        module: "behavioral-finance-psychology",
+        level: "intermediate",
+        duration: "1-2 hours",
+        lessons: 5,
+        topics: ["Cognitive biases", "Emotional investing", "Decision making", "Market psychology", "Discipline building"],
+        isEnrolled: false,
+        progress: 0,
+        xpReward: 125,
+        importance: "medium",
+        icon: Brain,
+        color: "bg-orange-100 text-orange-600",
+        filePath: "/courses/behavioral-finance-psychology/"
+      }
+    ]
   }
 ];
 
@@ -263,7 +457,7 @@ const useCourseData = (selectedCategory: string, selectedLevel: string) => {
     {
       id: "stock-foundations-001",
       title: "Stock Market Foundations",
-      description: "Beginner friendly introduction to stock market basics",
+      description: " to stock market basicsBeginner friendly introduction",
       category: "stock-market",
       module: "stock-foundations",
       level: "beginner",
@@ -610,30 +804,38 @@ const CategoryCard = React.memo(({ category, onSelect }: CategoryCardProps) => (
   </Card>
 ));
 
+// Functional Learning Path Card with navigation
 interface LearningPathCardProps {
   path: LearningPath;
   categories: Category[];
+  onStartPath: (path: LearningPath) => void;
 }
 
-const LearningPathCard = React.memo(({ path, categories }: LearningPathCardProps) => (
-  <Card className="border-0 shadow-lg hover:shadow-xl transition-shadow">
-    <CardHeader>
-      <div className="flex items-center space-x-3">
-        <div className={`p-3 rounded-lg ${path.color}`}>
-          <path.icon className="h-6 w-6" />
-        </div>
-        <div>
-          <CardTitle className="text-lg">{path.title}</CardTitle>
-          <CardDescription>{path.description}</CardDescription>
-        </div>
-      </div>
-    </CardHeader>
-    <CardContent>
-      <div className="space-y-4">
-        <div className="flex items-center justify-between text-sm text-gray-600">
-          <div className="flex items-center space-x-1">
-            <Clock className="h-4 w-4" />
-            <span>{path.duration}</span>
+const LearningPathCard = React.memo(({ path, categories, onStartPath }: LearningPathCardProps) => {
+  const getCategoryTitle = (categoryId: string) => {
+    const category = categories.find(c => c.id === categoryId);
+    return category ? category.title : categoryId;
+  };
+
+  const getIconComponent = (icon: any) => {
+    const IconComponent = icon;
+    return <IconComponent className="h-6 w-6" />;
+  };
+
+  const enrolledCourses = path.courses.filter(course => course.isEnrolled);
+  const completedCourses = path.courses.filter(course => course.progress === 100);
+  const pathProgress = path.courses.length > 0 ? Math.round((completedCourses.length / path.courses.length) * 100) : 0;
+
+  return (
+    <Card className="border-0 shadow-lg hover:shadow-xl transition-all">
+      <CardHeader>
+        <div className="flex items-center space-x-3">
+          <div className={`p-3 rounded-lg ${path.color}`}>
+            {getIconComponent(path.icon)}
+          </div>
+          <div className="flex-1">
+            <CardTitle className="text-lg">{path.title}</CardTitle>
+            <CardDescription>{path.description}</CardDescription>
           </div>
           <Badge className={
             path.level === "beginner" ? "bg-green-100 text-green-800" :
@@ -643,36 +845,85 @@ const LearningPathCard = React.memo(({ path, categories }: LearningPathCardProps
             {path.level}
           </Badge>
         </div>
-
-        <div className="space-y-2">
-          <h4 className="font-medium text-sm">Included Categories:</h4>
-          <div className="space-y-1">
-            {path.categories.map((catId: string) => {
-              const category = categories.find(c => c.id === catId);
-              return category ? (
-                <div key={catId} className="flex items-center space-x-2 text-sm text-gray-600">
-                  <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
-                  <span>{category.title}</span>
-                </div>
-              ) : null;
-            })}
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          <div className="flex items-center justify-between text-sm text-gray-600">
+            <div className="flex items-center space-x-1">
+              <Clock className="h-4 w-4" />
+              <span>{path.duration}</span>
+            </div>
+            <div className="flex items-center space-x-1">
+              <BookOpen className="h-4 w-4" />
+              <span>{path.courses.length} courses</span>
+            </div>
+            <Badge className="bg-purple-100 text-purple-800">
+              +{path.totalXp} XP
+            </Badge>
           </div>
-        </div>
 
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-gray-600">Total XP:</span>
-          <Badge className="bg-purple-100 text-purple-800">
-            +{path.totalXp} XP
-          </Badge>
-        </div>
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span>Path Progress</span>
+              <span>{pathProgress}%</span>
+            </div>
+            <Progress value={pathProgress} className="h-2" />
+          </div>
 
-        <Button className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700">
-          Start Learning Path
-        </Button>
-      </div>
-    </CardContent>
-  </Card>
-));
+          <div className="space-y-2">
+            <h4 className="font-medium text-sm">Included Courses:</h4>
+            <div className="space-y-2">
+              {path.courses.map((course) => (
+                <div key={course.id} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                  <div className="flex items-center space-x-3">
+                    <div className={`p-2 rounded-lg ${course.color}`}>
+                      <course.icon className="h-4 w-4" />
+                    </div>
+                    <div>
+                      <div className="text-sm font-medium">{course.title}</div>
+                      <div className="text-xs text-gray-500">{course.duration} • {course.lessons} lessons</div>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    {course.progress === 100 && (
+                      <CheckCircle className="h-4 w-4 text-green-600" />
+                    )}
+                    {course.progress > 0 && course.progress < 100 && (
+                      <div className="text-xs text-blue-600">{course.progress}%</div>
+                    )}
+                    {course.isEnrolled && (
+                      <Badge className="bg-blue-100 text-blue-800 text-xs">Enrolled</Badge>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <h4 className="font-medium text-sm">Learning Categories:</h4>
+            <div className="flex flex-wrap gap-2">
+              {path.categories.map((catId) => (
+                <Badge key={catId} variant="outline" className="text-xs">
+                  {getCategoryTitle(catId)}
+                </Badge>
+              ))}
+            </div>
+          </div>
+
+          <Button 
+            className="w-full bg-gradient-to-r from-green-600 to-blue-600 hover:from-green-700 hover:to-blue-700"
+            onClick={() => onStartPath(path)}
+          >
+            <Play className="h-4 w-4 mr-2" />
+            {enrolledCourses.length > 0 ? "Continue Path" : "Start Learning Path"}
+            <ArrowRight className="h-4 w-4 ml-2" />
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+});
 
 interface AchievementCardProps {
   achievement: Achievement;
@@ -722,6 +973,207 @@ const AchievementCard = React.memo(({ achievement }: AchievementCardProps) => (
   </Card>
 ));
 
+// Functional Learning Dashboard Component
+const FunctionalLearningDashboard = ({ courses, userData }: { courses: Course[], userData: UserData | null }) => {
+  const enrolledCourses = courses.filter(course => course.isEnrolled);
+  const completedCourses = courses.filter(course => course.progress === 100);
+  const inProgressCourses = courses.filter(course => course.progress > 0 && course.progress < 100);
+  
+  const totalLessons = enrolledCourses.reduce((sum, course) => sum + course.lessons, 0);
+  const completedLessons = enrolledCourses.reduce((sum, course) => sum + Math.floor(course.lessons * course.progress / 100), 0);
+  const overallProgress = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
+
+  const recentActivity = [
+    {
+      id: 1,
+      title: 'Completed "Stock Market Foundations"',
+      time: '2 hours ago',
+      xp: '+150 XP',
+      type: 'course_completion'
+    },
+    {
+      id: 2,
+      title: 'Started "SIP & Wealth Building"',
+      time: '1 day ago',
+      xp: '+25 XP',
+      type: 'course_start'
+    },
+    {
+      id: 3,
+      title: 'Level Up! Reached Level 5',
+      time: '3 days ago',
+      xp: 'New Level',
+      type: 'level_up'
+    }
+  ];
+
+  const stats = [
+    {
+      title: 'Courses Enrolled',
+      value: enrolledCourses.length,
+      icon: BookOpen,
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-100'
+    },
+    {
+      title: 'Courses Completed',
+      value: completedCourses.length,
+      icon: CheckCircle,
+      color: 'text-green-600',
+      bgColor: 'bg-green-100'
+    },
+    {
+      title: 'Lessons Completed',
+      value: `${completedLessons}/${totalLessons}`,
+      icon: FileText,
+      color: 'text-purple-600',
+      bgColor: 'bg-purple-100'
+    },
+    {
+      title: 'Total XP',
+      value: userData?.totalXp || 0,
+      icon: Star,
+      color: 'text-yellow-600',
+      bgColor: 'bg-yellow-100'
+    }
+  ];
+
+  return (
+    <div className="space-y-6">
+      {/* Welcome Header */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl shadow-lg p-6 text-white">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-2xl font-bold mb-2">Welcome back to your learning journey! 🎓</h2>
+            <p className="text-blue-100">Continue building your financial education and investment skills</p>
+          </div>
+          <div className="text-right">
+            <div className="text-3xl font-bold">{overallProgress}%</div>
+            <div className="text-sm text-blue-100">Overall Progress</div>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Stats */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        {stats.map((stat, index) => (
+          <Card key={index} className="border-0 shadow">
+            <CardContent className="p-4">
+              <div className="flex items-center space-x-3">
+                <div className={`p-2 rounded-lg ${stat.bgColor}`}>
+                  <stat.icon className={`h-5 w-5 ${stat.color}`} />
+                </div>
+                <div>
+                  <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
+                  <div className="text-sm text-gray-600">{stat.title}</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {/* Progress Overview */}
+      <div className="grid md:grid-cols-2 gap-6">
+        {/* In Progress Courses */}
+        <Card className="border-0 shadow-lg">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Activity className="h-5 w-5 text-blue-600" />
+              <span>Continue Learning</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {inProgressCourses.length > 0 ? (
+              <div className="space-y-3">
+                {inProgressCourses.map((course) => (
+                  <div key={course.id} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                    <div className={`p-2 rounded-lg ${course.color}`}>
+                      <course.icon className="h-5 w-5" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="font-medium text-sm">{course.title}</div>
+                      <div className="text-xs text-gray-600">{course.progress}% complete</div>
+                      <Progress value={course.progress} className="h-1 mt-1" />
+                    </div>
+                    <Button size="sm" variant="outline">
+                      Continue
+                    </Button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-6">
+                <BookOpen className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                <p className="text-gray-600">No courses in progress</p>
+                <Button className="mt-3" variant="outline">
+                  Browse Courses
+                </Button>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Recent Activity */}
+        <Card className="border-0 shadow-lg">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Clock className="h-5 w-5 text-green-600" />
+              <span>Recent Activity</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {recentActivity.map((activity) => (
+                <div key={activity.id} className="flex items-center space-x-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <div className="flex-1">
+                    <div className="text-sm font-medium">{activity.title}</div>
+                    <div className="text-xs text-gray-600">{activity.time}</div>
+                  </div>
+                  <Badge className="bg-green-100 text-green-800 text-xs">
+                    {activity.xp}
+                  </Badge>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Learning Recommendations */}
+      <Card className="border-0 shadow-lg">
+        <CardHeader>
+          <CardTitle className="flex items-center space-x-2">
+            <Star className="h-5 w-5 text-yellow-600" />
+            <span>Recommended Next Steps</span>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid md:grid-cols-3 gap-4">
+            {courses.filter(course => !course.isEnrolled).slice(0, 3).map((course) => (
+              <div key={course.id} className="p-4 border rounded-lg hover:shadow-md transition-shadow">
+                <div className="flex items-center space-x-3 mb-3">
+                  <div className={`p-2 rounded-lg ${course.color}`}>
+                    <course.icon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <div className="font-medium text-sm">{course.title}</div>
+                    <div className="text-xs text-gray-600">{course.duration}</div>
+                  </div>
+                </div>
+                <Button size="sm" className="w-full" variant="outline">
+                  Start Course
+                </Button>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
 // =============================================================================
 // MAIN COMPONENT
 // =============================================================================
@@ -730,7 +1182,7 @@ export default function LearnPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedLevel, setSelectedLevel] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState("dashboard"); // Changed default to dashboard for visibility
+  const [activeTab, setActiveTab] = useState("dashboard");
 
   const { courses, categories, userData, loading, error } = useCourseData(selectedCategory, selectedLevel);
 
@@ -814,8 +1266,26 @@ export default function LearnPage() {
 
   const handleCategorySelect = useCallback((categoryId: string) => {
     setSelectedCategory(categoryId);
-    setActiveTab("categories"); // Switch to categories tab when selecting
+    setActiveTab("categories");
   }, []);
+
+  // Learning Path handlers
+  const handleStartLearningPath = useCallback((path: LearningPath) => {
+    // Find the first course in the path that user hasn't completed
+    const firstIncompleteCourse = path.courses.find(course => course.progress < 100);
+    
+    if (firstIncompleteCourse) {
+      if (!firstIncompleteCourse.isEnrolled) {
+        handleEnrollCourse(firstIncompleteCourse.id);
+      }
+      
+      // Navigate to first lesson
+      const lessonId = firstIncompleteCourse.lessonsList?.[0]?.id || 'lesson-01';
+      window.location.href = `/learn/lesson/${firstIncompleteCourse.id}/${lessonId}?path=${path.id}`;
+    } else {
+      alert(`You've completed the entire "${path.title}" learning path! 🎉`);
+    }
+  }, [handleEnrollCourse]);
 
   // Loading state
   if (loading) {
@@ -928,8 +1398,9 @@ export default function LearnPage() {
               <TabsTrigger value="achievements">Achievements</TabsTrigger>
             </TabsList>
 
+            {/* FUNCTIONAL LEARNING DASHBOARD */}
             <TabsContent value="dashboard" className="space-y-6">
-              <LearnPageCourseDashboard />
+              <FunctionalLearningDashboard courses={courses} userData={userData} />
             </TabsContent>
 
             <TabsContent value="categories" className="space-y-6">
@@ -1031,10 +1502,16 @@ export default function LearnPage() {
               </Card>
             </TabsContent>
 
+            {/* FUNCTIONAL LEARNING PATHS */}
             <TabsContent value="paths" className="space-y-6">
               <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-6">
                 {LEARNING_PATHS.map((path) => (
-                  <LearningPathCard key={path.id} path={path} categories={categories} />
+                  <LearningPathCard 
+                    key={path.id} 
+                    path={path} 
+                    categories={categories}
+                    onStartPath={handleStartLearningPath}
+                  />
                 ))}
               </div>
             </TabsContent>
