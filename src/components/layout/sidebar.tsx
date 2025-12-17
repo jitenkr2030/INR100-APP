@@ -23,7 +23,12 @@ import {
   Target,
   Trophy,
   Building2,
-  DollarSign
+  DollarSign,
+  Brain,
+  Calculator,
+  TrendingUp as LearningPath,
+  Zap,
+  PlayCircle
 } from "lucide-react";
 
 interface SidebarProps {
@@ -49,7 +54,11 @@ export function Sidebar({ user, className }: SidebarProps) {
     { name: "Real Trading", href: "/real-trading", icon: DollarSign },
     { name: "Broker Setup", href: "/broker-setup", icon: Building2 },
     { name: "Wallet", href: "/wallet", icon: Wallet },
-    { name: "Learn", href: "/learn", icon: BookOpen },
+    { name: "Enhanced Learning", href: "/learn/enhanced-dashboard", icon: Zap, badge: "NEW" },
+    { name: "All Courses", href: "/learn", icon: BookOpen },
+    { name: "Learning Pathways", href: "/learn/pathways", icon: LearningPath },
+    { name: "Assessments", href: "/learn/assessments", icon: Brain },
+    { name: "Practice", href: "/learn/exercises", icon: Calculator },
     { name: "Community", href: "/community", icon: Users },
     { name: "Rewards", href: "/rewards", icon: Gift },
   ];
