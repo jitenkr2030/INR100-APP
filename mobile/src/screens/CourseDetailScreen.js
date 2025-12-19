@@ -31,7 +31,7 @@ const { width } = Dimensions.get('window');
 const CourseDetailScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const { categoryId, moduleId } = route.params;
+  const { courseId } = route.params;
   
   const [loading, setLoading] = useState(true);
   const [course, setCourse] = useState(null);
@@ -42,7 +42,7 @@ const CourseDetailScreen = () => {
     
     // Track screen view
     AnalyticsService.getInstance().trackScreenView('CourseDetail', 'CourseDetailScreen');
-  }, [categoryId, moduleId]);
+  }, [courseId]);
 
   const loadCourseDetail = async () => {
     try {
@@ -52,13 +52,10 @@ const CourseDetailScreen = () => {
       const response = await apiService.getLearningContent();
       
       if (response.success) {
-        const categoryData = response.data.courses.find((cat: any) => cat.id === categoryId);
-        if (categoryData) {
-          const courseData = categoryData.modules.find((mod: any) => mod.id === moduleId);
-          if (courseData) {
-            setCourse(courseData);
-            setEnrolled(courseData.isEnrolled);
-          }
+        const courseData = response.data.find((course: any) => course.id === courseId);
+        if (courseData) {
+          setCourse(courseData);
+          setEnrolled(courseData.isEnrolled);
         }
       }
     } catch (error) {
@@ -86,8 +83,7 @@ const CourseDetailScreen = () => {
 
   const handleStartCourse = () => {
     navigation.navigate('LessonDetail', {
-      categoryId,
-      moduleId,
+      courseId,
       lessonId: 'lesson-1'
     });
   };
@@ -274,8 +270,7 @@ const CourseDetailScreen = () => {
             onPress={() => {
               const lessonId = `lesson-${(index + 1).toString().padStart(3, '0')}`;
               navigation.navigate('LessonDetail', {
-                categoryId,
-                moduleId,
+                courseId,
                 lessonId
               });
             }}

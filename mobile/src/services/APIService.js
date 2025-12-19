@@ -330,25 +330,25 @@ class APIService {
   // Learning Methods
   async getLearningContent() {
     try {
-      const response = await this.axiosInstance.get('/learn');
+      const response = await this.axiosInstance.get('/api/learn/courses');
       return { success: true, data: response.data };
     } catch (error) {
       return { success: false, error: error.response?.data?.message || 'Failed to fetch learning content' };
     }
   }
 
-  async getLessonContent(categoryId, moduleId, lessonId) {
+  async getLessonContent(courseId, lessonId) {
     try {
-      const response = await this.axiosInstance.get(`/learn/${categoryId}/${moduleId}/lesson/${lessonId}`);
+      const response = await this.axiosInstance.get(`/api/learn/lesson/${courseId}/${lessonId}`);
       return { success: true, data: response.data };
     } catch (error) {
       return { success: false, error: error.response?.data?.message || 'Failed to fetch lesson content' };
     }
   }
 
-  async getLessonsList(categoryId, moduleId) {
+  async getLessonsList(courseId) {
     try {
-      const response = await this.axiosInstance.get(`/learn/${categoryId}/${moduleId}/lessons`);
+      const response = await this.axiosInstance.get(`/api/learn/courses/${courseId}/lessons`);
       return { success: true, data: response.data };
     } catch (error) {
       return { success: false, error: error.response?.data?.message || 'Failed to fetch lessons list' };
@@ -357,16 +357,25 @@ class APIService {
 
   async updateLessonProgress(progressData) {
     try {
-      const response = await this.axiosInstance.put('/learn/progress', progressData);
+      const response = await this.axiosInstance.put('/api/learn/progress', progressData);
       return { success: true, data: response.data };
     } catch (error) {
       return { success: false, error: error.response?.data?.message || 'Failed to update lesson progress' };
     }
   }
 
+  async getProgress() {
+    try {
+      const response = await this.axiosInstance.get('/api/learn/progress');
+      return { success: true, data: response.data };
+    } catch (error) {
+      return { success: false, error: error.response?.data?.message || 'Failed to fetch progress' };
+    }
+  }
+
   async updateLearningProgress(contentId, progress) {
     try {
-      const response = await this.axiosInstance.put('/learn/progress', {
+      const response = await this.axiosInstance.put('/api/learn/progress', {
         contentId,
         progress,
         completed: progress >= 100

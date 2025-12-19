@@ -31,7 +31,7 @@ const { width } = Dimensions.get('window');
 const LessonDetailScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const { categoryId, moduleId, lessonId } = route.params;
+  const { courseId, lessonId } = route.params;
   
   const [loading, setLoading] = useState(true);
   const [lesson, setLesson] = useState(null);
@@ -43,14 +43,14 @@ const LessonDetailScreen = () => {
   useEffect(() => {
     loadLessonContent();
     trackScreenView();
-  }, [categoryId, moduleId, lessonId]);
+  }, [courseId, lessonId]);
 
   const loadLessonContent = async () => {
     try {
       setLoading(true);
       
       const apiService = APIService.getInstance();
-      const response = await apiService.getLessonContent(categoryId, moduleId, lessonId);
+      const response = await apiService.getLessonContent(courseId, lessonId);
       
       if (response.success) {
         setLesson(response.data);
@@ -74,8 +74,7 @@ const LessonDetailScreen = () => {
       const apiService = APIService.getInstance();
       await apiService.updateLessonProgress({
         lessonId,
-        categoryId,
-        moduleId,
+        courseId,
         completed: true,
         timeSpent: currentTime
       });
@@ -106,8 +105,7 @@ const LessonDetailScreen = () => {
   const handleNextLesson = () => {
     // Navigate to next lesson or back to course overview
     navigation.navigate('CourseDetail', {
-      categoryId,
-      moduleId,
+      courseId,
       showNextLesson: true
     });
   };
@@ -115,8 +113,7 @@ const LessonDetailScreen = () => {
   const handlePreviousLesson = () => {
     // Navigate to previous lesson
     navigation.navigate('CourseDetail', {
-      categoryId,
-      moduleId,
+      courseId,
       showPreviousLesson: true
     });
   };
@@ -277,7 +274,7 @@ const LessonDetailScreen = () => {
             style={styles.featureButton}
             onPress={() => navigation.navigate('SocialLearning', { 
               userId: 'demo-user',
-              currentCourse: categoryId,
+              currentCourse: courseId,
               currentLesson: lessonId 
             })}
           >
